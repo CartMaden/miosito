@@ -1,5 +1,5 @@
 * {box-sizing: border-box;}
-.mySlides {display: none;}
+.mySlides img{max-width: 200px; vertical-align: middle;}
 img {vertical-align: middle; height: 100px;}
 
 
@@ -8,7 +8,7 @@ img {vertical-align: middle; height: 100px;}
   max-width: 200px;
   position: relative;
   margin: auto;
-  padding: 1px;
+
 }
 
 
