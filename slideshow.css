@@ -1,14 +1,13 @@
 * {box-sizing: border-box;}
 .mySlides img{max-width: 200px; vertical-align: middle;}
-img {vertical-align: middle; height: 100px;}
-
+img {vertical-align: middle; height: 100px;  width: 150px;}
 
 .slideshow-container {
   width: 200px;
   max-width: 200px;
   position: relative;
   margin: auto;
-
+  padding-left: 23px;
 }
 
 
