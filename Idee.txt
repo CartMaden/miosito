@@ -1,0 +1,4 @@
+login + raccomandazione partite(date in base all'esperienza e skill del giocatore)
+Area Admin (Spettatore)
+Profili giocatore 1/2
+Tabellone (Bracket)
