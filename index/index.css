@@ -11,7 +11,7 @@ section { padding: 40px 20px; }
     color: #ffffff; text-align: center; padding: 100px; }
 .hero h1 { margin: 0; font-size: 48px; }
 footer { background: #222; color: #fff; text-align: center; padding: 20px; }
-html {scrollbar-gutter: stable;}
+html {scrollbar-gutter: stable; }
 .nav-links{display: flex; gap: 20px;}
 nav img{ max-width: 150px; height: auto;}
 

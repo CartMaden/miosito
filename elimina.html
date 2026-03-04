@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Torneo Esport</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin: 20px 0;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.start { background: #22c55e; }
+.reset { background: #ef4444; }
+
+.bracket {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 30px;
+}
+
+.round {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.match {
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.player {
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.player:hover {
+    background: #334155;
+}
+
+.winner {
+    background: #22c55e;
+}
+
+</style>
+</head>
+<body>
+
+<h1>🏆 Torneo Esport</h1>
+<button class="start" onclick="startTournament()">Inizia Torneo</button>
+<button class="reset" onclick="resetTournament()">Reset</button>
+
+<div class="bracket" id="bracket"></div>
+
+<script>
+let players = [
+    { name: "Player1", mmr: 1500 },
+    { name: "Player2", mmr: 1300 },
+    { name: "Player3", mmr: 1700 },
+    { name: "Player4", mmr: 1200 },
+    { name: "Player5", mmr: 1600 },
+    { name: "Player6", mmr: 1400 },
+    { name: "Player7", mmr: 1800 },
+    { name: "Player8", mmr: 1250 }
+];
+
+let rounds = [];
+
+function startTournament() {
+    // Seeding: ordina per MMR decrescente
+    players.sort((a, b) => b.mmr - a.mmr);
+
+    rounds = [];
+    rounds.push(createMatches(players));
+    renderBracket();
+}
+
+function createMatches(playerList) {
+    let matches = [];
+    for (let i = 0; i < playerList.length; i += 2) {
+        matches.push({
+            p1: playerList[i],
+            p2: playerList[i + 1],
+            winner: null
+        });
+    }
+    return matches;
+}
+
+function renderBracket() {
+    const bracket = document.getElementById("bracket");
+    bracket.innerHTML = "";
+
+    rounds.forEach((round, roundIndex) => {
+        const roundDiv = document.createElement("div");
+        roundDiv.classList.add("round");
+
+        round.forEach((match, matchIndex) => {
+            const matchDiv = document.createElement("div");
+            matchDiv.classList.add("match");
+
+            ["p1", "p2"].forEach(playerKey => {
+                if (!match[playerKey]) return;
+
+                const playerDiv = document.createElement("div");
+                playerDiv.textContent = match[playerKey].name + " (" + match[playerKey].mmr + ")";
+                playerDiv.classList.add("player");
+
+                if (match.winner === match[playerKey]) {
+                    playerDiv.classList.add("winner");
+                }
+
+                playerDiv.onclick = () => selectWinner(roundIndex, matchIndex, playerKey);
+                matchDiv.appendChild(playerDiv);
+            });
+
+            roundDiv.appendChild(matchDiv);
+        });
+
+        bracket.appendChild(roundDiv);
+    });
+}
+
+function selectWinner(roundIndex, matchIndex, playerKey) {
+    let match = rounds[roundIndex][matchIndex];
+    if (match.winner) return;
+
+    match.winner = match[playerKey];
+
+    if (!rounds[roundIndex + 1]) {
+        rounds[roundIndex + 1] = [];
+    }
+
+    let nextRound = rounds[roundIndex + 1];
+
+    if (matchIndex % 2 === 0) {
+        nextRound.push({ p1: match.winner, p2: null, winner: null });
+    } else {
+        nextRound[nextRound.length - 1].p2 = match.winner;
+    }
+
+    renderBracket();
+}
+
+function resetTournament() {
+    rounds = [];
+    document.getElementById("bracket").innerHTML = "";
+}
+</script>
+
+</body>
+</html>
