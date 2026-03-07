@@ -1,16 +1,19 @@
 body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
 /* --- HEADER FIXED --- */
 header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
     display: flex;
-    justify-content: space-between;  /* logo left, nav right */
-    align-items: center;             /* vertically center everything */
-    height: 60px;                    /* fixed height for consistency */
-    padding: 0 20px;                 /* horizontal padding only */
-    box-sizing: border-box;          /* include padding in height */
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    box-sizing: border-box;
     background: #ffffff;
     border-bottom: 2px solid black;
 }
-
 /* --- LOGO IMAGE FIXED --- */
 header a img {
     height: 40px;     /* fixed height for all pages */
