@@ -418,3 +418,63 @@ body {
         font-size: 12px;
     }
 }
+
+#darkModeToggle{
+border: none;
+background: none;
+outline: none;
+box-shadow: none;
+cursor: pointer;
+font-size: 30px;
+padding-bottom: 7px;
+
+color:grey;
+transition: color 0.25s ease, transform 0.2s ease;
+}
+ì
+#darkModeToggle:hover{
+
+transform: scale(1.15);
+}
+
+ì
+#darkModeToggle:active{
+transform: scale(0.9);
+}
+
+@media (max-width:768px){
+#darkModeToggle{
+font-size:18px;
+}
+}
+
+
+body.dark-mode{
+background:#121212e7;
+color:#ffffff;
+}
+
+
+
+body.dark-mode header{
+background:#1a1a1a;
+border-bottom:2px solid #333;
+}
+
+
+
+body.dark-mode nav a{
+color:#ffffff;
+}
+
+body.dark-mode nav a:hover{
+color:#ff4655;
+}
+
+
+
+body.dark-mode .hero{
+filter:brightness(0.7);
+}
+
+
