@@ -34,6 +34,7 @@ document.querySelectorAll(".media-container").forEach(container => {
 
 });
 
+/*dark mode*/
 
 const toggleButton = document.getElementById("darkModeToggle");
 

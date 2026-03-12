@@ -97,19 +97,23 @@ body.r6-theme {
 }
 
 * {box-sizing: border-box;}
-.mySlides img{max-width: 200px; vertical-align: middle;}
+
 img {vertical-align: middle; height: 100px; width: 150px; }
 
-
 .slideshow-container {
-  width: 200px;
-  max-width: 200px;
-  position: relative;
-  margin: auto;
-  padding-left: 23px;
+    width: 200px;
+    height: 150px;
+    margin: auto;
+    overflow: hidden;
 }
 
-
+.mySlides img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    object-position: center;  /* centra l'immagine nel contenitore */
+    display: block;
+}
 .active {
   background-color: #ffffff;
 }

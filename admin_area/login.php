@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=area_privata", "root", "");
+} catch (PDOException $e) {
+    header("Location: setup.php");
+    exit;
+}
+
+
 // Se l'admin è già loggato, mandalo direttamente alla dashboard
 if (isset($_SESSION['admin_loggato']) && $_SESSION['admin_loggato'] === true) {
     header("Location: dashboard.php");
