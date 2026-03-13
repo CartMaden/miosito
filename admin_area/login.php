@@ -84,4 +84,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 </body>
+<script src="darkmode.js"></script>
 </html>
