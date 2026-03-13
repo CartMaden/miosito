@@ -44,7 +44,7 @@ localStorage.setItem("darkMode","enabled");
 toggleButton.textContent = "☀";
 }else{
 localStorage.setItem("darkMode","disabled");
-toggleButton.textContent = "☾";
+toggleButton.textContent = "⏾";
 }
 
 })
