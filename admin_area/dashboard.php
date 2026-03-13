@@ -20,6 +20,7 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 
     <button onclick="location.href='matchmaking.php'" >Avvia il matchmaking</button>
     <button onclick="location.href='logout.php'" style="color: red;">Esci (Logout)</a>
+    <button onclick="location.href='squadre.html'" >Visualizza squadre Iscritte</button>
 
 </body>
 </html>

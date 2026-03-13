@@ -12,5 +12,6 @@ VVV ancora presente il problema di grandezza della navbar, solo nella index
     sotituire form iscrizione
     popolare con dati da database
     rivedere matchmaking
+    IMPOSTARE IL DOCKER IMPORTANTE!!!!!!!!!!!
 
 (VVV = fatto)
