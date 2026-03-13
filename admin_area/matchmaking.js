@@ -1,6 +1,6 @@
 let players = [
-    { name: "Player1", mmr: 1500 },
-    { name: "Player2", mmr: 1300 },
+    { name: "Ivan il terribile", mmr: 1500 },
+    { name: "Demon slayer", mmr: 1300 },
     { name: "Player3", mmr: 1700 },
     { name: "Player4", mmr: 1200 },
     { name: "Player5", mmr: 1600 },
