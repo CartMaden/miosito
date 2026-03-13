@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Entra</button>
         </form>
     </div>
-    /*ciaone */
+
 </body>
 <script src="darkmode.js"></script>
 </html>
