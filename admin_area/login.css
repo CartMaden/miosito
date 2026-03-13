@@ -82,7 +82,6 @@ button { padding: 10px 20px; background: #007BFF; color: white; border: none; cu
         footer{font-size: 8px;}
         }
         
-
 #darkModeToggle{
 border: none;
 background: none;
@@ -112,7 +111,6 @@ font-size:18px;
 }
 }
 
-
 body.dark-mode{
 background:#121212e7;
 color:#ffffff;
@@ -134,5 +132,7 @@ color:#ff4655;
 body.dark-mode .hero{
 filter:brightness(0.7);
 }
+
+
 
 

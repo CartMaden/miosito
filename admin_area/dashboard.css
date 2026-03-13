@@ -1,0 +1,3 @@
+button { padding: 10px 20px; background-color: goldenrod; color: white; border: none;
+    cursor: pointer; width: 500px; margin-bottom: 20px;display: flex; justify-content: center;
+    font-size: large;}

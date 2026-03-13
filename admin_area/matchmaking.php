@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Torneo Esport</title>
-<style>
-
-</style>
+<link rel="stylesheet" href="matchmaking.css">
 </head>
 <body>
 

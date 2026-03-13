@@ -8,7 +8,9 @@ VVV logo its che resetta la pagina
 VVV modificare box calendario
 VVV hover navbar
 VVV modificare footer
-    link embed form: https://docs.google.com/forms/d/e/1FAIpQLSf_KlR0gZmsHh4Lm7EWhT9LoXQdb4AzWcjWRkulYuM-vYln8w/formresponse?embedded=true
 VVV ancora presente il problema di grandezza della navbar, solo nella index
+    sotituire form iscrizione
+    popolare con dati da database
+    rivedere matchmaking
 
 (VVV = fatto)

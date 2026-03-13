@@ -13,12 +13,13 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 <head>
     <meta charset="UTF-8">
     <title>Pannello di Controllo</title>
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body style="font-family: Arial; padding: 20px;">
 
 
-    <a href="matchmaking.php" >Avvia il matchmaking</a>
-    <a href="logout.php" style="color: red;">Esci (Logout)</a>
+    <button onclick="location.href='matchmaking.php'" >Avvia il matchmaking</button>
+    <button onclick="location.href='logout.php'" style="color: red;">Esci (Logout)</a>
 
 </body>
 </html>
