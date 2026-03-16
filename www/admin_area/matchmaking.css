@@ -516,3 +516,51 @@ body.dark-mode {
     min-width: 50%;
   }
 }
+
+/* ── WINNER / LOSER STATES ── */
+.team-row.loser {
+  opacity: 0.38;
+  background: rgba(255, 51, 85, 0.04);
+}
+
+.team-row.loser .team-name,
+.team-row.loser .team-mmr {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,51,85,0.4);
+}
+
+.match-done {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* ── VOTE BUTTON ── */
+.vote-btn {
+  background: rgba(74, 127, 255, 0.15);
+  border: 1px solid rgba(74, 127, 255, 0.35);
+  color: var(--accent);
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  line-height: 1.4;
+}
+
+.vote-btn:hover {
+  background: rgba(74, 127, 255, 0.3);
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+
+/* ── WIN BADGE ── */
+.win-badge {
+  font-size: 13px;
+  color: var(--win);
+  flex-shrink: 0;
+  font-weight: 700;
+}
