@@ -54,16 +54,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin</title>
-    <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; margin-top: 100px; background: #f4f4f4;}
-        .login-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input { display: block; width: 100%; margin-bottom: 15px; padding: 10px; box-sizing: border-box;}
-        button { padding: 10px 20px; background: #007BFF; color: white; border: none; cursor: pointer; width: 100%;}
-        .errore { color: red; font-size: 14px; margin-bottom: 10px;}
-    </style>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
+
 </head>
 <body>
+    <div>
+<header>
+    <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
+    <nav>
+        <a href="../calendario/calendario.html">Calendario</a>
+        <a href="../classifica/classifiche.html">Classifica</a>
+        <a href="../news/news.html">News</a>
+        <a href="../info/info.html">Info</a>
+        <a href="../live/live.html">Live</a>
+        <a href="../iscrizione/iscrizione.html">Iscriviti</a>
+        <a href="../admin_area/login.php">Area riservata</a>
+        <button id="darkModeToggle">⏾</button> 
+    </nav>
+</header>
+</div>
     <div class="login-box">
         <h2>Accesso Riservato</h2>
         
@@ -82,4 +94,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 </body>
+<script src="../condivisi/darkmode.js"></script>
 </html>
