@@ -56,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin</title>
+    <link rel="shortcut icon" href="../photo/favicon.ico">
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
 

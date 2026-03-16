@@ -17,6 +17,7 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
     <title>Pannello di Controllo</title>
     <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="shortcut icon" href="../photo/favicon.ico">
 
 </head>
 
