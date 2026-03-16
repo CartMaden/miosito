@@ -5,7 +5,7 @@
     max-width: 1000px;
     margin: 60px auto;
     padding: 50px;
-    background: #ffffff;
+    background: #5d5d5d;
     border-radius: 14px;
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
 }
@@ -57,7 +57,7 @@
 }
 
 .content ul li {
-    background: #f5f7fa;
+    background: #b0b0b0;
     margin: 12px 0;
     padding: 15px 20px;
     border-radius: 8px;
