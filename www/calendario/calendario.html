@@ -1,133 +1,108 @@
 <!DOCTYPE html>
-<html>
-    <head>
+<html lang="it">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario</title>
-    <link rel="stylesheet" href="calendario.css">
-    <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
+    <title>Calendario — Lazio Digital</title>
     <link rel="shortcut icon" href="../photo/favicon.ico">
-    </head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
+    <link rel="stylesheet" href="calendario.css">
+</head>
+<body class="dark-mode">
 
-<!-- HEADER + NAV -->
 <header>
-    <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
+    <a href="index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>
         <a href="../info/info.html">Info</a>
-        <a href="./calendario.html">Calendario</a>
+        <a href="calendario.html">Calendario</a>
         <a href="../news/news.html">News</a>
         <a href="../live/live.html">Live</a>
-        <a href="../merchandising/merchandising.html">Merchandise</a>
+        <a href="../merchandise/merchandise.html">Merchandise</a>
         <a href="../iscrizione/iscrizione.html">Partecipa</a>
         <button id="darkModeToggle">⏾</button> 
     </nav>
 </header>
-<!-- SEZIONE index -->
-<section id="index" class="hero">
-    <h1>Calendario</h1>
-    <p>Qui troverai le date dei match!</p>
-</section>
-<!-- SEZIONE VALORANT -->
-<section class="slider">
 
-<button class="slide-btn prev">❮</button>
-
-<div class="slides">
-
-<!-- VALORANT -->
-<div class="slide valorant">
-    <h2>VALORANT</h2>
-
-    <div class="group">
-        <h3>Gruppo A</h3>
-        <ul>
-            <li>Team Phoenix vs Team Viper - 12 Marzo 2026 - 15:00</li>
-            <li>Team Sage vs Team Jett - 13 Marzo 2026 - 17:00</li>
-            <li>Team Phoenix vs Team Sage - 15 Marzo 2026 - 16:00</li>
-        </ul>
+<!-- HERO -->
+<div class="page-hero">
+    <div class="hero-left">
+        <h1>Calen<span>dario</span></h1>
+        <p>Risultati e scontri del torneo — aggiornati in tempo reale</p>
     </div>
-
-    <div class="group">
-        <h3>Gruppo B</h3>
-        <ul>
-            <li>Team Omen vs Team Reyna - 14 Marzo 2026 - 15:00</li>
-            <li>Team Killjoy vs Team Cypher - 16 Marzo 2026 - 17:00</li>
-            <li>Team Omen vs Team Killjoy - 18 Marzo 2026 - 16:00</li>
-        </ul>
+    <div class="hero-meta" id="heroMeta">
+        <div class="live-dot" id="liveDot" style="display:none">
+            <span class="dot-pulse"></span> Live
+        </div>
     </div>
 </div>
 
-
-<!-- LEAGUE OF LEGENDS -->
-<div class="slide lol">
-    <h2>LEAGUE OF LEGENDS</h2>
-
-    <div class="group">
-        <h3>Gruppo A</h3>
-        <ul>
-            <li>Demacia Squad vs Noxus Warriors - 20 Marzo 2026 - 15:00</li>
-            <li>Piltover Team vs Zaun Legends - 21 Marzo 2026 - 18:00</li>
-            <li>Demacia Squad vs Piltover Team - 23 Marzo 2026 - 16:00</li>
-        </ul>
+<!-- STATS BAR -->
+<div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+        <div class="stat-value" id="statTotali">—</div>
+        <div class="stat-label">Partite totali</div>
     </div>
-
-    <div class="group">
-        <h3>Gruppo B</h3>
-        <ul>
-            <li>Ionia Spirit vs Freljord Kings - 22 Marzo 2026 - 15:00</li>
-            <li>Shurima Rise vs Targon Elite - 24 Marzo 2026 - 18:00</li>
-            <li>Ionia Spirit vs Shurima Rise - 26 Marzo 2026 - 16:00</li>
-        </ul>
+    <div class="stat-item">
+        <div class="stat-value" id="statGiocate">—</div>
+        <div class="stat-label">Disputate</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="statRimanenti">—</div>
+        <div class="stat-label">Da giocare</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="statFase">—</div>
+        <div class="stat-label">Fase attuale</div>
     </div>
 </div>
 
+<!-- MAIN -->
+<div class="main-wrap">
 
-<!-- RAINBOW SIX -->
-<div class="slide r6">
-    <h2>RAINBOW SIX SIEGE</h2>
-
-    <div class="group">
-        <h3>Gruppo A</h3>
-        <ul>
-            <li>Alpha Ops vs Bravo Unit - 28 Marzo 2026 - 15:00</li>
-            <li>Delta Force vs Echo Squad - 29 Marzo 2026 - 17:00</li>
-            <li>Alpha Ops vs Delta Force - 31 Marzo 2026 - 16:00</li>
-        </ul>
+    <!-- TAB BAR -->
+    <div class="tab-bar" id="tabBar" style="display:none">
+        <button class="tab-btn active" data-tab="tutti">Tutte le partite</button>
+        <button class="tab-btn" data-tab="risultati">Risultati</button>
+        <button class="tab-btn" data-tab="prossime">Da giocare</button>
     </div>
+    <div id="bracketCalendario"></div>
+<script src="calendario_bracket.js"></script>
 
-    <div class="group">
-        <h3>Gruppo B</h3>
-        <ul>
-            <li>Shadow Team vs Tactical Five - 30 Marzo 2026 - 15:00</li>
-            <li>Sniper Crew vs Breach Masters - 2 Aprile 2026 - 17:00</li>
-            <li>Shadow Team vs Sniper Crew - 4 Aprile 2026 - 16:00</li>
-        </ul>
+    <!-- CONTENUTO PRINCIPALE -->
+    <div id="calContent">
+        <div class="empty-state">
+            <div class="icon">📅</div>
+            <h2>Caricamento in corso…</h2>
+            <p>Recupero le partite del torneo.</p>
+        </div>
     </div>
-</div>
 
 </div>
 
-<button class="slide-btn next">❯</button>
-
-</section>
+<div class="toast" id="toast"></div>
 
 <footer class="site-footer">
-    <div class="footer-left">
-       <p><a href="./admin_area/login.php" class="hidden-link" >Area riservata</a></p>
+        <div class="footer-left">
+        <p><a href="../admin_area/login.php" class="hidden-link" >Area riservata</a></p>
+    </div>
     <div class="footer-center">
         <p class="footer-title">Torneo ITS Lazio Digital Gaming</p>
         <p class="footer-copy">© 2026 All rights reserved.</p>
+        <p><a href="../admin_area/login.php">Area riservata</a></p>
     </div>
 
     <div class="footer-right">
+        
         <p> <a href="tel:+391234567890">☎ Ivan He — +39 328 169 3209</a></p>
         <p><a href="tel:+393518152561">☎ Emanuele Campus — +39 351 815 2561</a></p>
         <p> <a href="mailto:itstorneoesports@gmail.com">✉itstorneoesports@gmail.com</a></p>
     </div>
 </footer>
 
-</body>
 <script src="calendario.js"></script>
 <script src="../condivisi/darkmode.js"></script>
+</body>
 </html>

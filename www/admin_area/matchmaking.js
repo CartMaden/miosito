@@ -9,6 +9,48 @@ document.addEventListener("DOMContentLoaded", () => {
     let bracket = null;  // Array di round; ogni round è Array di {t1, t2, winner}
     let maxMMR  = 0;
 
+    /* ── PERSIST: salva il bracket su server ── */
+    async function saveBracket() {
+        if (!bracket) return;
+        try {
+            await fetch("save_bracket.php", {
+                method:  "POST",
+                headers: { "Content-Type": "application/json" },
+                body:    JSON.stringify({
+                    bracket: bracket,
+                    rounds:  buildRoundNames(bracket.length)
+                })
+            });
+        } catch (err) {
+            console.warn("saveBracket error:", err);
+        }
+    }
+
+    /* ── PERSIST: ripristina il bracket dal server al caricamento pagina ── */
+    async function loadBracket() {
+        try {
+            const res  = await fetch("get_bracket.php");
+            const json = await res.json();
+            if (!json.success || !json.bracket) return;
+
+            bracket = json.bracket;
+            maxMMR  = 0;
+            // Ricalcola maxMMR dai dati del bracket
+            bracket.forEach(round => round.forEach(m => {
+                [m.t1, m.t2].forEach(t => {
+                    if (t && t.mmr_totale > maxMMR) maxMMR = t.mmr_totale;
+                });
+            }));
+
+            renderBracket();
+            btnReset.style.display = "";
+            btnGenerate.disabled   = false;
+            showToast(`♻️ Bracket ripristinato (salvato il ${new Date(json.saved_at).toLocaleString("it-IT")})`);
+        } catch (err) {
+            // Nessun bracket salvato — normale al primo avvio
+        }
+    }
+
     /* ── ELEMENTS ── */
     const btnRefresh  = document.getElementById("btnRefresh");
     const btnGenerate = document.getElementById("btnGenerate");
@@ -60,10 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ── RESET ── */
-    function resetBracket() {
+    async function resetBracket() {
         bracket = null;
         bracketArea.innerHTML = emptyState("🎮", "Bracket resettato", "Clicca \"Genera bracket\" per crearne uno nuovo.");
         btnReset.style.display = "none";
+        // Cancella il bracket salvato sul server
+        try {
+            await fetch("save_bracket.php", {
+                method:  "POST",
+                headers: { "Content-Type": "application/json" },
+                body:    JSON.stringify({ bracket: null, rounds: [] })
+            });
+        } catch(e) {}
     }
 
     /* ── STATS ── */
@@ -167,6 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         advanceAllByes(0);
 
         renderBracket();
+        saveBracket();
         btnReset.style.display = "";
         showToast(`✅ Bracket generato — ${bracket.length} turni, ${seeded.length} squadre`);
     }
@@ -234,6 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
         advanceSingleMatch(roundIdx, matchIdx);
 
         renderBracket();
+        saveBracket();
         showToast(`🏆 ${esc(newWinner.caposquadra)} avanza al prossimo turno!`);
     }
 
@@ -394,6 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ── AUTO-LOAD ── */
-    loadSquadre();
+    // Prima prova a ripristinare un bracket esistente, poi carica le squadre
+    loadBracket().then(() => loadSquadre());
 
 }); // DOMContentLoaded
