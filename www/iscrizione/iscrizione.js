@@ -40,7 +40,6 @@ const feedback = document.getElementById("form-feedback");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     feedback.className = "";
-    feedback.style.display = "none";
 
     // Client-side validation
     let valid = true;
@@ -87,7 +86,7 @@ form.addEventListener("submit", async (e) => {
         const result = await response.json();
 
         if (response.ok && result.success) {
-            feedback.textContent = "✅ Iscrizione inviata con successo! Ti contatteremo a breve.";
+            feedback.textContent = "✅ Iscrizione inviata con successo! Buona fortuna campione!";
             feedback.className = "success";
             form.reset();
             document.getElementById("mmrTotal").textContent = "0";
