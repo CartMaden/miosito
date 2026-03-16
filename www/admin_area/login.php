@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </head>
 <body>
-    <div>
+<div>
 <header>
     <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>

@@ -1,24 +1,34 @@
-button { padding: 10px 20px; background-color: goldenrod; color: white; border: none;
-    cursor: pointer; width: 500px; margin-bottom: 20px;display: flex; justify-content: center;
-    font-size: large;}
-    
-    nav {
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-    margin: 0;           /* remove extra margins */
-    align-items: center;  /* vertically center links in header */
+body {
+  background-image: url("bg3.jpg") !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  font-family: Arial, sans-serif;
+  display: block !important;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f4f4f4;
 }
-
-nav a {
-    color: #003366;
-    text-decoration: none;
-    font-size: 18px;
-    line-height: 1;   /* same as logo height for perfect alignment */
-    margin: 0;           /* remove previous top margin */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: -1;
 }
-
-nav a:hover {
-    color: #ff0015;
-    cursor: pointer;
+body::-webkit-scrollbar {
+  display: none;
+}
+.btn-dashboard {
+  padding: 10px 20px;
+  background-color: goldenrod;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 500px;
+  margin: 0 auto 20px auto;
+  display: block;
+  justify-content: center;
+  border-radius: 5px;
+  font-size: large;
+  align-items: center;
 }

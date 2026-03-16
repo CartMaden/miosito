@@ -8,10 +8,10 @@
  * Modifica le costanti qui sotto con i dati del tuo server.
  */
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'area_privata');    // ← stesso database del sito
-define('DB_USER', 'root');            // ← utente MySQL
-define('DB_PASS', 'password');        // ← password MySQL
+define('DB_HOST', 'db');
+define('DB_NAME', 'area_privata');
+define('DB_USER', 'root');
+define('DB_PASS', 'root');
 define('DB_CHARSET', 'utf8mb4');
 
 /* ── CORS & HEADERS ── */
@@ -48,8 +48,8 @@ $corso       = trim($data['corso']       ?? '');
 $giocatori   = $data['giocatori']        ?? [];
 
 $corsi_validi = [
-    'Cybersecurity', 'Sviluppo Web', 'Cloud Computing',
-    'Data Science', 'Digital Marketing', 'Game Design', 'Altro'
+    'Developer', 'Cybersecurity', 'Cloud Computing', 'Game Developer',
+    'Digital Media Specialist', 'AI and Data Science Specialist'
 ];
 
 if (!$caposquadra || !$corso) {

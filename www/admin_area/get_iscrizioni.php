@@ -10,10 +10,10 @@
  * GET get_iscrizioni.php?orderby=mmr      → ordina per MMR totale
  */
 
-define('DB_HOST',    'localhost');
+define('DB_HOST',    'db');
 define('DB_NAME',    'area_privata');
 define('DB_USER',    'root');
-define('DB_PASS',    'password');   // ← modifica con la tua password
+define('DB_PASS',    'root');
 define('DB_CHARSET', 'utf8mb4');
 
 header('Content-Type: application/json; charset=utf-8');

@@ -1,21 +1,22 @@
 body {
-  background-image: url('bg3.jpg') !important;
+  background-image: url("bg3.jpg") !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  
   font-family: Arial, sans-serif;
-  display: flex !important;
+  display: block !important;
   flex-direction: column;
-  justify-content: center; 
-  margin-top: 100px;
+  justify-content: center;
   background-color: #f4f4f4;
 }
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   z-index: -1;
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 .login-box {
   margin: 100px auto 0;
@@ -46,18 +47,13 @@ button {
   margin-bottom: 10px;
 }
 
-body.dark-mode {
-  background: #121212 !important;
-  color: #ffffff !important;
-}
-body.dark-mode header {
-  background: #1a1a1a !important;
-  border-bottom: 2px solid #333 !important;
-}
-body.dark-mode nav a {
-  color: #ffffff !important;
-}
 body.dark-mode .login-box {
   background: #1e1e1e !important;
   color: #ffffff !important;
+}
+
+body.dark-mode {
+  background-image: url("bg3.jpg") !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
 }

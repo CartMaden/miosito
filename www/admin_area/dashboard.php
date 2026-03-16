@@ -13,12 +13,14 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pannello di Controllo</title>
+    <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
     <link rel="stylesheet" href="dashboard.css">
+
 </head>
 
-<body style="font-family: Arial; padding: 20px;">
-    <div>
+<body>
         <header>
             <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
             <nav>
@@ -28,16 +30,17 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
                 <a href="../info/info.html">Info</a>
                 <a href="../live/live.html">Live</a>
                 <a href="../iscrizione/iscrizione.html">Iscriviti</a>
+                <a href="squadre.html">Squadre</a>
+                <a href="matchmaking.html">Matchmaking</a>
                 <button id="darkModeToggle">⏾</button>
             </nav>
         </header>
-    </div>
-
-
-    <button onclick="location.href='matchmaking.php'">Avvia il matchmaking</button>
-    <button onclick="location.href='logout.php'" style="color: red;">Esci (Logout)</a>
-        <button onclick="location.href='squadre.html'">Visualizza squadre Iscritte</button>
-
+    <main style="padding: 20px;">
+        <button class="btn-dashboard" onclick="location.href='matchmaking.html'">Avvia il matchmaking</button>
+        <button class="btn-dashboard" onclick="location.href='squadre.html'">Visualizza squadre Iscritte</button>
+        <button class="btn-dashboard" onclick="location.href='logout.php'" style="background-color: red;">Esci (Logout)</buton>
+</main>
+<script src="../condivisi/darkmode.js"></script>
 </body>
 
 </html>
