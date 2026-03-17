@@ -3,7 +3,7 @@
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 
-$file = __DIR__ . "/bracket_state.json";
+$file = __DIR__ . "/classifica_pubblica.json";
 
 if (!file_exists($file)) {
     echo json_encode(["success" => false, "message" => "Nessun bracket salvato"]);
@@ -14,7 +14,7 @@ $raw = file_get_contents($file);
 $data = json_decode($raw, true);
 
 if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(["success" => false, "message" => "File bracket_state.json corrotto"]);
+    echo json_encode(["success" => false, "message" => "File classifica_pubblica.json corrotto"]);
     exit;
 }
 

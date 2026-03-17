@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// IL BUTTAFUORI: Se non hai il pass (la sessione), torni al login
+if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -20,10 +32,10 @@
         <a href="../news/news.html">News</a>
         <a href="../info/info.html">Info</a>
         <a href="../live/live.html">Live</a>
-        <a href="../iscrizione/iscrizione.html">Iscriviti</a>
-        <a href="../admin_area/login.php">Area riservata</a>
-        <a href="squadre.html">Squadre</a>
-        <a href="matchmaking.html">Matchmaking</a>
+        <a href="../iscrizione/iscrizione.html">partecipa</a>
+        <a href="../admin_area/login.php">Dashboard</a>
+        <a href="squadre.php">Squadre</a>
+        <a href="matchmaking.php">Matchmaking</a>
         <button id="darkModeToggle">⏾</button>
     </nav>
 </header>

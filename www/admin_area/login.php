@@ -67,12 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>
         <a href="../calendario/calendario.html">Calendario</a>
-        <a href="../classifica/classifiche.html">Classifica</a>
         <a href="../news/news.html">News</a>
         <a href="../info/info.html">Info</a>
         <a href="../live/live.html">Live</a>
-        <a href="../iscrizione/iscrizione.html">Iscriviti</a>
-        <a href="../admin_area/login.php">Area riservata</a>
+        <a href="../iscrizione/iscrizione.html">partecipa</a>
+        <a href="../admin_area/login.php">Dashboard</a>
         <button id="darkModeToggle">⏾</button> 
     </nav>
 </header>

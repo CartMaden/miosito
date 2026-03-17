@@ -9,14 +9,9 @@
   --text: #e8e8ff;
   --muted: #6868aa;
   --win: #22c55e;
-  --connector: #2a2a50;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: "Barlow Condensed", sans-serif;
@@ -25,442 +20,115 @@ body {
   min-height: 100vh;
 }
 
-/* reuse header from site */
-body.dark-mode {
-  background: var(--bg);
-}
-
-/* ── PAGE HERO ── */
+/* ── HERO & STATS (Invariati dal tuo design) ── */
 .page-hero {
   background: linear-gradient(135deg, #0a0a18 0%, #001133 100%);
   border-bottom: 1px solid var(--border);
   padding: 36px 28px 30px;
+  display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.hero-left h1 { font-family: "Rajdhani", sans-serif; font-size: 36px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #fff; }
+.hero-left h1 span { color: var(--accent); }
+.hero-left p { font-size: 14px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { font-family: "Rajdhani", sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 9px 20px; border-radius: 2px; border: none; cursor: pointer; transition: all 0.18s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #6699ff; transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--muted); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: transparent; border: 1.5px solid #ff335544; color: var(--accent2); }
+.btn-danger:hover { background: #ff335515; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.stats-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); background: var(--surface); }
+.stat-item { flex: 1; padding: 14px 20px; border-right: 1px solid var(--border); text-align: center; }
+.stat-item:last-child { border-right: none; }
+.stat-value { font-family: "Rajdhani", sans-serif; font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+.stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+
+.main-wrap { padding: 28px; max-width: 1200px; margin: 0 auto; }
+
+/* Sostituisci la parte ACCORDION TURNI e HERO ACTIONS con questo: */
+
+/* Aggiunta bottone di vittoria */
+.btn-win { background: var(--win); color: #fff; }
+.btn-win:hover { background: #1eb053; transform: translateY(-1px); }
+.btn-win:disabled { background: #22c55e66; color: #ffffff88; cursor: not-allowed; }
+
+
+/* ── BOARD ORIZZONTALE (Colonne dei Turni) ── */
+.horizontal-board {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  position: relative;
-  overflow: hidden;
-}
-
-.page-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -55deg,
-    transparent,
-    transparent 22px,
-    rgba(74, 127, 255, 0.03) 22px,
-    rgba(74, 127, 255, 0.03) 23px
-  );
-}
-
-.hero-left h1 {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #fff;
-  position: relative;
-}
-
-.hero-left h1 span {
-  color: var(--accent);
-}
-
-.hero-left p {
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 4px;
-  letter-spacing: 0.5px;
-  position: relative;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  position: relative;
-}
-
-.btn {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 9px 20px;
-  border-radius: 2px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.18s;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-}
-.btn-primary:hover {
-  background: #6699ff;
-  transform: translateY(-1px);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 1.5px solid var(--border);
-  color: var(--muted);
-}
-.btn-outline:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.btn-danger {
-  background: transparent;
-  border: 1.5px solid #ff335544;
-  color: var(--accent2);
-}
-.btn-danger:hover {
-  background: #ff335515;
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ── STATS BAR ── */
-.stats-bar {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.stat-item {
-  flex: 1;
-  padding: 14px 20px;
-  border-right: 1px solid var(--border);
-  text-align: center;
-}
-
-.stat-item:last-child {
-  border-right: none;
-}
-
-.stat-value {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 3px;
-}
-
-/* ── MAIN LAYOUT ── */
-.main-wrap {
-  padding: 28px;
+  gap: 24px;
   overflow-x: auto;
-}
-
-/* ── BRACKET ── */
-.bracket-container {
-  display: flex;
-  gap: 0;
-  align-items: flex-start;
-  min-width: max-content;
   padding-bottom: 20px;
+  min-height: 200px;
+  /* IMPORTANTE: Allinea le colonne in alto e permette loro di allungarsi liberamente */
+  align-items: flex-start; 
 }
 
-.round-col {
+.horizontal-board::-webkit-scrollbar { height: 10px; }
+.horizontal-board::-webkit-scrollbar-track { background: var(--surface); border-radius: 5px; }
+.horizontal-board::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+.horizontal-board::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+.round-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  flex: 0 0 320px;
   display: flex;
   flex-direction: column;
-  min-width: 230px;
+  /* RIMOSSO max-height: 70vh; così la colonna cresce finché serve */
 }
 
 .round-header {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 0 12px 14px;
+  padding: 14px 20px;
+  background: var(--card);
   text-align: center;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 0;
+  border-radius: 6px 6px 0 0;
 }
 
-.round-matches {
+.round-content {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  position: relative;
+  gap: 16px;
+  /* RIMOSSO overflow-y: auto; così non c'è la barra di scorrimento interna */
 }
 
-/* ── MATCH SLOT ── */
-.match-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
+/* Scrollbar interna delle colonne */
+.round-content::-webkit-scrollbar { width: 6px; }
+.round-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
+.empty-state { width: 100%; text-align: center; padding: 60px 20px; }
+
+/* ── MATCH CARD ── */
+/* ── MATCH CARD ── */
 .match-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 3px;
-  width: 210px;
-  margin: 0 12px;
-  overflow: hidden;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-  flex-shrink: 0;
-}
-
-.match-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 20px rgba(74, 127, 255, 0.12);
-}
-
-.match-num {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 5px 10px 4px;
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid var(--border);
-}
-
-.team-row {
-  display: flex;
-  align-items: center;
-  padding: 8px 10px;
-  gap: 8px;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.15s;
-  cursor: default;
-}
-
-.team-row:last-of-type {
-  border-bottom: none;
-}
-.team-row:hover {
-  background: rgba(74, 127, 255, 0.06);
-}
-
-.team-row.winner {
-  background: rgba(34, 197, 94, 0.08);
-}
-
-.team-row.winner .team-name {
-  color: var(--win);
-}
-.team-row.winner .team-mmr {
-  color: var(--win);
-}
-
-.team-seed {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--muted);
-  width: 16px;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-.team-name {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: 0.3px;
-}
-
-.team-name.tbd {
-  color: var(--muted);
-  font-style: italic;
-  font-weight: 400;
-}
-
-.team-mmr {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-  white-space: nowrap;
-  letter-spacing: 0.5px;
-}
-
-/* ── CONNECTORS ── */
-.connector-col {
+  border-radius: 4px;
+  /* FORZIAMO la card ad adattarsi al contenuto senza tagliare nulla */
+  height: auto !important; 
+  min-height: fit-content !important;
+  overflow: hidden; 
+  transition: border-color 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
-  width: 0;
-  position: relative;
 }
 
-/* ── FINAL / CHAMPION ── */
-.champion-box {
-  background: linear-gradient(135deg, #0d1f0d, #0a1a0a);
-  border: 1.5px solid var(--win);
-  border-radius: 4px;
-  padding: 20px 24px;
-  min-width: 210px;
-  margin: 0 12px;
-  text-align: center;
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.15);
-}
+.match-card:hover { border-color: var(--accent); box-shadow: 0 0 15px rgba(74, 127, 255, 0.1); }
+.match-done { border-color: rgba(34, 197, 94, 0.3); }
 
-.champion-box .trophy {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.champion-box .label {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--win);
-  margin-bottom: 6px;
-}
-
-.champion-box .name {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.champion-box .name.tbd {
-  color: var(--muted);
-  font-size: 15px;
-  font-style: italic;
-  font-weight: 400;
-}
-
-/* ── SVG CONNECTORS ── */
-.bracket-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-
-/* ── EMPTY / LOADING ── */
-.empty-state {
-  text-align: center;
-  padding: 80px 20px;
-}
-
-.empty-state .icon {
-  font-size: 52px;
-  margin-bottom: 16px;
-}
-
-.empty-state h2 {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-
-.empty-state p {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  color: var(--text);
-  padding: 12px 18px;
-  border-radius: 3px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 9999;
-  max-width: 320px;
-}
-
-.toast.show {
-  transform: translateY(0);
-  opacity: 1;
-}
-.toast.error {
-  border-left-color: var(--accent2);
-}
-
-/* ── MATCH DIFF BADGE ── */
-.match-diff {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 2px;
-  background: rgba(74, 127, 255, 0.12);
-  color: var(--accent);
-  text-align: center;
-  margin: 0 10px 6px;
-  letter-spacing: 0.5px;
-}
-
-/* ── SEEDING TABLE ── */
-.seeding-section {
-  margin-top: 36px;
-  border-top: 1px solid var(--border);
-  padding-top: 28px;
-}
-
-.section-title {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-.seed-table {
-  width: 100%;
-  max-width: 700px;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.seed-table th {
+.match-num {
   font-family: "Rajdhani", sans-serif;
   font-size: 11px;
   font-weight: 700;
@@ -468,99 +136,66 @@ body.dark-mode {
   text-transform: uppercase;
   color: var(--muted);
   padding: 8px 12px;
-  text-align: left;
+  background: rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid var(--border);
-}
-
-.seed-table td {
-  padding: 9px 12px;
-  border-bottom: 1px solid rgba(37, 37, 69, 0.6);
-  color: var(--text);
-}
-
-.seed-table tr:hover td {
-  background: rgba(74, 127, 255, 0.05);
-}
-
-.seed-num {
-  font-family: "Rajdhani", sans-serif;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.mmr-bar-wrap {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  justify-content: space-between;
 }
 
-.mmr-bar {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--accent);
-  min-width: 4px;
-  transition: width 0.6s ease;
+.team-row {
+  display: flex; 
+  align-items: center; 
+  padding: 12px 14px;
+  min-height: 54px; /* Altezza uguale per tutte le righe */
+  flex: 1; /* Permette alla riga di prendersi tutto il suo spazio */
+  gap: 8px;
+  border-bottom: 1px solid var(--border); 
+  transition: background 0.15s;
 }
+
+.team-row:last-of-type { border-bottom: none; }
+.team-row.winner { background: rgba(34, 197, 94, 0.08); }
+.team-row.winner .team-name, .team-row.winner .team-mmr { color: var(--win); }
+.team-row.loser { opacity: 0.4; }
+
+.team-name { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.team-mmr { font-family: "Rajdhani", sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); }
+.team-pts { font-family: "Rajdhani", sans-serif; font-size: 12px; color: var(--muted); margin-right: 8px; }
+
+/* ── PULSANTI VOTO E BADGE ── */
+.vote-btn {
+  background: rgba(74, 127, 255, 0.15); border: 1px solid rgba(74, 127, 255, 0.35); color: var(--accent);
+  font-size: 11px; padding: 4px 8px; border-radius: 2px; cursor: pointer; font-family: "Rajdhani", sans-serif; font-weight: 700; transition: all 0.15s;
+}
+.vote-btn:hover { background: rgba(74, 127, 255, 0.3); transform: scale(1.05); }
+.win-badge { font-size: 14px; color: var(--win); font-weight: 700; }
+
+/* ── CLASSIFICA / LEADERBOARD ── */
+.leaderboard-section { margin-top: 36px; border-top: 1px solid var(--border); padding-top: 28px; }
+.section-title { font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+
+.seed-table { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--surface); border: 1px solid var(--border); }
+.seed-table th { font-family: "Rajdhani", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 12px; text-align: left; border-bottom: 1px solid var(--border); background: var(--card); }
+.seed-table td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+.seed-table tr:hover td { background: rgba(74, 127, 255, 0.05); }
+
+.rank-1 td { color: #ffd700; font-weight: bold; }
+.rank-2 td { color: #c0c0c0; }
+.rank-3 td { color: #cd7f32; }
+.pts-highlight { font-family: "Rajdhani", sans-serif; font-size: 18px; font-weight: 700; color: var(--win); }
+
+/* ── EMPTY / TOAST ── */
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state .icon { font-size: 42px; margin-bottom: 16px; }
+.empty-state h2 { font-family: "Rajdhani", sans-serif; font-size: 20px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.empty-state p { font-size: 14px; color: var(--muted); }
+
+.toast { position: fixed; bottom: 28px; right: 28px; background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); color: var(--text); padding: 12px 18px; border-radius: 3px; font-size: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 9999; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-left-color: var(--accent2); }
 
 @media (max-width: 768px) {
-  .page-hero {
-    padding: 24px 16px;
-  }
-  .main-wrap {
-    padding: 16px;
-  }
-  .stats-bar {
-    flex-wrap: wrap;
-  }
-  .stat-item {
-    min-width: 50%;
-  }
-}
-
-/* ── WINNER / LOSER STATES ── */
-.team-row.loser {
-  opacity: 0.38;
-  background: rgba(255, 51, 85, 0.04);
-}
-
-.team-row.loser .team-name,
-.team-row.loser .team-mmr {
-  color: var(--muted);
-  text-decoration: line-through;
-  text-decoration-color: rgba(255,51,85,0.4);
-}
-
-.match-done {
-  border-color: rgba(34, 197, 94, 0.3);
-}
-
-/* ── VOTE BUTTON ── */
-.vote-btn {
-  background: rgba(74, 127, 255, 0.15);
-  border: 1px solid rgba(74, 127, 255, 0.35);
-  color: var(--accent);
-  font-size: 11px;
-  padding: 3px 7px;
-  border-radius: 2px;
-  cursor: pointer;
-  font-family: "Rajdhani", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s;
-  line-height: 1.4;
-}
-
-.vote-btn:hover {
-  background: rgba(74, 127, 255, 0.3);
-  border-color: var(--accent);
-  transform: scale(1.08);
-}
-
-/* ── WIN BADGE ── */
-.win-badge {
-  font-size: 13px;
-  color: var(--win);
-  flex-shrink: 0;
-  font-weight: 700;
+  .page-hero { padding: 24px 16px; }
+  .stats-bar { flex-wrap: wrap; }
+  .stat-item { min-width: 50%; border-bottom: 1px solid var(--border); }
 }

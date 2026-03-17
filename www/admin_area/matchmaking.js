@@ -1,68 +1,19 @@
-/* ============================================================
-   matchmaking.js — Bracket a eliminazione diretta basato su MMR
-   ============================================================ */
-
 document.addEventListener("DOMContentLoaded", () => {
+    let squadre = []; 
+    let rounds = []; 
+    let maxMMR = 0;
 
-    /* ── STATE ── */
-    let squadre = [];
-    let bracket = null;  // Array di round; ogni round è Array di {t1, t2, winner}
-    let maxMMR  = 0;
+    const btnRefresh = document.getElementById("btnRefresh");
+    const btnNextRound = document.getElementById("btnNextRound");
+    const btnReset = document.getElementById("btnReset");
+    const btnFinish = document.getElementById("btnFinish");
+    const roundsArea = document.getElementById("roundsArea");
 
-    /* ── PERSIST: salva il bracket su server ── */
-    async function saveBracket() {
-        if (!bracket) return;
-        try {
-            await fetch("save_bracket.php", {
-                method:  "POST",
-                headers: { "Content-Type": "application/json" },
-                body:    JSON.stringify({
-                    bracket: bracket,
-                    rounds:  buildRoundNames(bracket.length)
-                })
-            });
-        } catch (err) {
-            console.warn("saveBracket error:", err);
-        }
-    }
+    btnRefresh.addEventListener("click", loadSquadre);
+    btnNextRound.addEventListener("click", generateNextRound);
+    btnReset.addEventListener("click", resetTournament);
+    btnFinish.addEventListener("click", exportLeaderboard);
 
-    /* ── PERSIST: ripristina il bracket dal server al caricamento pagina ── */
-    async function loadBracket() {
-        try {
-            const res  = await fetch("get_bracket.php");
-            const json = await res.json();
-            if (!json.success || !json.bracket) return;
-
-            bracket = json.bracket;
-            maxMMR  = 0;
-            // Ricalcola maxMMR dai dati del bracket
-            bracket.forEach(round => round.forEach(m => {
-                [m.t1, m.t2].forEach(t => {
-                    if (t && t.mmr_totale > maxMMR) maxMMR = t.mmr_totale;
-                });
-            }));
-
-            renderBracket();
-            btnReset.style.display = "";
-            btnGenerate.disabled   = false;
-            showToast(`♻️ Bracket ripristinato (salvato il ${new Date(json.saved_at).toLocaleString("it-IT")})`);
-        } catch (err) {
-            // Nessun bracket salvato — normale al primo avvio
-        }
-    }
-
-    /* ── ELEMENTS ── */
-    const btnRefresh  = document.getElementById("btnRefresh");
-    const btnGenerate = document.getElementById("btnGenerate");
-    const btnReset    = document.getElementById("btnReset");
-    const bracketArea = document.getElementById("bracketArea");
-
-    /* ── EVENT LISTENERS ── */
-    btnRefresh.addEventListener("click",  loadSquadre);
-    btnGenerate.addEventListener("click", generateBracket);
-    btnReset.addEventListener("click",    resetBracket);
-
-    /* ── TOAST ── */
     function showToast(msg, isError = false) {
         const t = document.getElementById("toast");
         t.textContent = msg;
@@ -71,314 +22,249 @@ document.addEventListener("DOMContentLoaded", () => {
         t._timer = setTimeout(() => { t.className = "toast"; }, 3200);
     }
 
-    /* ── LOAD SQUADRE ── */
     async function loadSquadre() {
-        btnRefresh.disabled    = true;
+        btnRefresh.disabled = true;
         btnRefresh.textContent = "Caricamento…";
         try {
-            const res  = await fetch("get_iscrizioni.php?orderby=mmr");
+            const res = await fetch("get_iscrizioni.php?orderby=mmr");
             const json = await res.json();
             if (!json.success) throw new Error(json.message);
 
-            squadre = json.data;
-            maxMMR  = squadre.length ? Math.max(...squadre.map(s => s.mmr_totale)) : 1;
+            squadre = json.data.map(s => ({ ...s, punti: 0 }));
+            maxMMR = squadre.length ? Math.max(...squadre.map(s => s.mmr_totale)) : 1;
 
-            updateStats();
-            renderSeeding();
-            btnGenerate.disabled = squadre.length < 2;
+            if (rounds.length > 0) rounds = [];
+            
+            recalculatePoints();
+            renderUI();
             showToast(`✅ ${squadre.length} squadre caricate`);
-
-            if (bracket) {
-                bracket = null;
-                bracketArea.innerHTML = emptyState("🔄", "Squadre aggiornate", "Rigenera il bracket per applicare le modifiche.");
-                btnReset.style.display = "none";
-            }
         } catch (err) {
-            showToast("❌ Errore nel caricamento: " + err.message, true);
+            showToast("❌ Errore: " + err.message, true);
         } finally {
-            btnRefresh.disabled    = false;
-            btnRefresh.textContent = "↺ Aggiorna squadre";
+            btnRefresh.disabled = false;
+            btnRefresh.textContent = "↺ Ricarica";
         }
     }
 
-    /* ── RESET ── */
-    async function resetBracket() {
-        bracket = null;
-        bracketArea.innerHTML = emptyState("🎮", "Bracket resettato", "Clicca \"Genera bracket\" per crearne uno nuovo.");
-        btnReset.style.display = "none";
-        // Cancella il bracket salvato sul server
+    async function resetTournament() {
+        if(!confirm("Sei sicuro di voler azzerare l'intero torneo?")) return;
+        rounds = [];
+        squadre.forEach(s => s.punti = 0);
+        
         try {
             await fetch("save_bracket.php", {
-                method:  "POST",
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body:    JSON.stringify({ bracket: null, rounds: [] })
+                body: JSON.stringify({ bracket: null })
             });
         } catch(e) {}
+
+        renderUI();
+        showToast("🗑️ Torneo resettato");
     }
 
-    /* ── STATS ── */
+function recalculatePoints() {
+        squadre.forEach(s => s.punti = 0);
+        rounds.forEach(round => {
+            round.forEach(match => {
+                // Se c'è un vincitore e NON è un BYE (t2 non è nullo), assegna 1 punto
+                if (match.winner && match.t2 !== null) {
+                    const realTeam = squadre.find(s => s.caposquadra === match.winner.caposquadra);
+                    if (realTeam) realTeam.punti += 1;
+                }
+            });
+        });
+    }
+
+// Nuova funzione: Controlla se una squadra ha già ricevuto un BYE nei turni passati
+    function hasReceivedBye(caposquadra) {
+        return rounds.some(r => r.some(m => m.t2 === null && m.t1.caposquadra === caposquadra));
+    }
+
+    // Sostituisci interamente la tua vecchia generateNextRound con questa:
+    function generateNextRound() {
+        if (squadre.length < 2) return;
+
+        if (rounds.length > 0) {
+            const lastRound = rounds[rounds.length - 1];
+            if (lastRound.some(m => !m.winner)) {
+                showToast("⚠️ Concludi tutte le partite del turno corrente!", true);
+                return;
+            }
+        }
+
+        recalculatePoints();
+
+        // Ordina sempre per: 1. Punti decrescenti -> 2. MMR decrescente
+        const sorted = [...squadre].sort((a, b) => {
+            if (b.punti !== a.punti) return b.punti - a.punti;
+            return b.mmr_totale - a.mmr_totale;
+        });
+
+        const newRound = [];
+
+        // ── GESTIONE INTELLIGENTE DEL BYE ──
+        let byeTeam = null;
+        if (sorted.length % 2 !== 0) {
+            // Se le squadre sono dispari, cerchiamo DAL BASSO chi NON ha mai avuto un BYE
+            let byeIdx = -1;
+            for (let i = sorted.length - 1; i >= 0; i--) {
+                if (!hasReceivedBye(sorted[i].caposquadra)) {
+                    byeIdx = i;
+                    break;
+                }
+            }
+            // Se in qualche modo tutti lo hanno già avuto (casi rarissimi), prendiamo l'ultimo
+            if (byeIdx === -1) byeIdx = sorted.length - 1;
+
+            // Rimuoviamo temporaneamente il team scelto per il BYE dalla lista
+            byeTeam = sorted.splice(byeIdx, 1)[0];
+        }
+
+        // ── ACCOPPIAMENTI CLASSICI ──
+        let index = 0;
+        while (index < sorted.length) {
+            const t1 = sorted[index++];
+            const t2 = sorted[index++]; // Ora siamo sicuri che t2 esista sempre perché la lunghezza è pari
+            newRound.push({ t1: t1, t2: t2, winner: null });
+        }
+
+        // ── AGGIUNTA DEL BYE IN CODA AL TURNO ──
+        if (byeTeam) {
+            newRound.push({ t1: byeTeam, t2: null, winner: byeTeam });
+        }
+
+        rounds.push(newRound);
+        recalculatePoints();
+        saveTournament();
+        renderUI();
+        
+        // Scorri automaticamente tutto a destra per vedere il nuovo turno
+        setTimeout(() => {
+            roundsArea.scrollLeft = roundsArea.scrollWidth;
+        }, 100);
+
+        showToast(`✅ Turno ${rounds.length} generato!`);
+    }
+
+    function setWinner(roundIdx, matchIdx, teamSlot) {
+        const match = rounds[roundIdx][matchIdx];
+        if (!match.t1 || !match.t2) return; 
+
+        const newWinner = teamSlot === 1 ? match.t1 : match.t2;
+        if (match.winner && match.winner.caposquadra === newWinner.caposquadra) return; 
+
+        match.winner = newWinner;
+        
+        recalculatePoints();
+        saveTournament();
+        renderUI();
+    }
+
+    /* ── ESPORTA CLASSIFICA PUBBLICA ── */
+    async function exportLeaderboard() {
+        // Ordina definitivamente la classifica
+        const sortedLeaderboard = [...squadre].sort((a, b) => {
+            if (b.punti !== a.punti) return b.punti - a.punti;
+            return b.mmr_totale - a.mmr_totale;
+        });
+
+        try {
+            btnFinish.textContent = "Esportazione...";
+            const res = await fetch("export_classifica.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ classifica: sortedLeaderboard, turniGiocati: rounds.length })
+            });
+            const data = await res.json();
+            
+            if(data.success) {
+                showToast("🏆 Torneo concluso! Classifica esportata pubblicamente.");
+            } else {
+                showToast("❌ Errore durante l'esportazione.", true);
+            }
+        } catch (err) {
+            showToast("❌ Impossibile esportare.", true);
+        } finally {
+            btnFinish.textContent = "🏆 Concludi Torneo";
+        }
+    }
+
+    /* ── RENDER COMPLETO UI ── */
+    function renderUI() {
+        const isReadyForNext = rounds.length === 0 || rounds[rounds.length - 1].every(m => m.winner !== null);
+        const allMatchesDone = rounds.length > 0 && rounds.every(r => r.every(m => m.winner !== null));
+
+        btnNextRound.disabled = !isReadyForNext || squadre.length < 2;
+        btnReset.style.display = rounds.length > 0 ? "inline-block" : "none";
+        
+        // Gestione bottone Concludi
+        btnFinish.style.display = rounds.length > 0 ? "inline-block" : "none";
+        btnFinish.disabled = !allMatchesDone; // Attivo solo se tutti i turni sono completati al 100%
+
+        updateStats();
+        renderRounds();
+        renderLeaderboard();
+    }
+
     function updateStats() {
-        const n      = squadre.length;
-        const size   = n > 0 ? nextPow2(n) : 0;
-        const rounds = size > 0 ? Math.log2(size) : 0;
-        const totalM = size > 0 ? size - 1 : 0;
+        const n = squadre.length;
+        let partiteTot = 0;
+        rounds.forEach(r => partiteTot += r.length);
         const avgMMR = n > 0 ? Math.round(squadre.reduce((a, s) => a + s.mmr_totale, 0) / n) : 0;
 
         document.getElementById("statSquadre").textContent = n || "—";
-        document.getElementById("statPartite").textContent = totalM || "—";
-        document.getElementById("statTurni").textContent   = rounds || "—";
-        document.getElementById("statAvgMMR").textContent  = avgMMR > 0 ? avgMMR.toLocaleString("it-IT") : "—";
+        document.getElementById("statTurni").textContent = rounds.length || "0";
+        document.getElementById("statPartite").textContent = partiteTot || "0";
+        document.getElementById("statAvgMMR").textContent = avgMMR > 0 ? avgMMR.toLocaleString("it-IT") : "—";
     }
 
-    /* ── SEEDING TABLE ── */
-    function renderSeeding() {
-        const section = document.getElementById("seedingSection");
-        const tbody   = document.getElementById("seedBody");
-
-        if (!squadre.length) { section.style.display = "none"; return; }
-        section.style.display = "block";
-
-        tbody.innerHTML = squadre.map((s, i) => {
-            const barW = Math.round((s.mmr_totale / maxMMR) * 120);
-            return `<tr>
-                <td><span class="seed-num">${i + 1}</span></td>
-                <td>${esc(s.caposquadra)}</td>
-                <td>${esc(s.corso)}</td>
-                <td>
-                    <div class="mmr-bar-wrap">
-                        <span style="min-width:70px">${s.mmr_totale.toLocaleString("it-IT")}</span>
-                        <div class="mmr-bar" style="width:${barW}px"></div>
-                    </div>
-                </td>
-                <td style="color:var(--muted);font-size:12px">${s.giocatori.length} giocatori</td>
-            </tr>`;
-        }).join("");
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       ALGORITMO DI ABBINAMENTO — minimo divario MMR al primo turno
-
-       Principio:
-         - Ordina per MMR decrescente: [s1, s2, s3 … sN]
-         - I BYE vanno alle squadre con MMR PIÙ ALTO (in testa alla lista)
-           come ricompensa per il ranking migliore
-         - I BYE occupano i primi slot del round 0 (match 0, 1, …)
-           così alimentano il nextMatch 0 del round 1 senza collisioni
-         - Le partite reali (coppie adiacenti) vengono dopo, min divario MMR
-         - Esempio con 6 squadre (size=8, byes=2):
-             slot 0: s1 BYE  ┐→ nextMatch 0 del round 1
-             slot 1: s2 BYE  ┘
-             slot 2: s3 vs s4 ┐→ nextMatch 1 del round 1
-             slot 3: s5 vs s6 ┘
-    ══════════════════════════════════════════════════════════ */
-    function generateBracket() {
-        if (squadre.length < 2) return;
-
-        const seeded = [...squadre].sort((a, b) => b.mmr_totale - a.mmr_totale);
-        const size   = nextPow2(seeded.length);
-        const byes   = size - seeded.length;
-
-        const firstRound = [];
-        let idx = 0;
-
-        // BYE PRIMA: le squadre con MMR più alto saltano il primo turno
-        // Occupano i primi slot in coppie (slot 0+1, 2+3, …) → ogni coppia
-        // alimenta un singolo nextMatch senza collisioni di indice
-        for (let i = 0; i < byes; i++) {
-            const t1 = seeded[idx++];
-            firstRound.push({ t1, t2: null, winner: t1 });
+function renderRounds() {
+        if (rounds.length === 0) {
+            roundsArea.innerHTML = `<div class="empty-state">
+                <div class="icon">🎮</div>
+                <h2>Nessun turno generato</h2>
+                <p>Clicca "Nuovo Turno" per iniziare il torneo.</p>
+            </div>`;
+            return;
         }
 
-        // PARTITE REALI DOPO: coppie adiacenti → divario MMR minimo
-        while (idx < seeded.length) {
-            const t1 = seeded[idx++];
-            const t2 = seeded[idx++] ?? null;
-            if (t2 === null) {
-                // Squadra spaiata (non dovrebbe accadere con nextPow2, ma gestita)
-                firstRound.push({ t1, t2: null, winner: t1 });
-            } else {
-                firstRound.push({ t1, t2, winner: null });
-            }
-        }
-
-        // Costruisce i round successivi come slot vuoti
-        bracket = [firstRound];
-        let prev = firstRound;
-        while (prev.length > 1) {
-            const next = [];
-            for (let i = 0; i < prev.length; i += 2) {
-                next.push({ t1: null, t2: null, winner: null });
-            }
-            bracket.push(next);
-            prev = next;
-        }
-
-        // Propaga i BYE del round 0 → round 1
-        advanceAllByes(0);
-
-        renderBracket();
-        saveBracket();
-        btnReset.style.display = "";
-        showToast(`✅ Bracket generato — ${bracket.length} turni, ${seeded.length} squadre`);
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       AVANZAMENTO VINCITORI — propaga solo il match specificato
-       al proprio slot nel round successivo. Non tocca gli altri.
-    ══════════════════════════════════════════════════════════ */
-    function advanceSingleMatch(roundIdx, matchIdx) {
-        if (roundIdx >= bracket.length - 1) return;
-
-        const w = bracket[roundIdx][matchIdx].winner;
-        if (w === null) return;
-
-        const nextMatchIdx = Math.floor(matchIdx / 2);
-        const isFirst      = matchIdx % 2 === 0;
-        const nextMatch    = bracket[roundIdx + 1][nextMatchIdx];
-
-        if (isFirst) nextMatch.t1 = w;
-        else         nextMatch.t2 = w;
-        // Nessun auto-avanzamento: ogni nextMatch aspetta entrambi gli slot.
-        // I BYE sono già pre-risolti con winner:t1 alla generazione e
-        // propagati da advanceAllByes — non servono ulteriori auto-avanzamenti.
-    }
-
-    /* Propaga tutti i vincitori già noti (BYE pre-risolti) dal round indicato in poi.
-       Usato alla generazione per popolare i round iniziali con i BYE. */
-    function advanceAllByes(roundIdx) {
-        if (roundIdx >= bracket.length - 1) return;
-        const cur  = bracket[roundIdx];
-        const next = bracket[roundIdx + 1];
-
-        for (let m = 0; m < cur.length; m++) {
-            if (cur[m].winner !== null) advanceSingleMatch(roundIdx, m);
-        }
-
-        // Risolvi automaticamente i nextMatch che ora hanno un solo partecipante
-        // (succede quando due BYE adiacenti alimentano lo stesso nextMatch)
-        next.forEach(m => {
-            if (m.winner !== null) return;
-            if (m.t1 !== null && m.t2 === null) { m.winner = m.t1; }
-            if (m.t1 === null && m.t2 !== null) { m.winner = m.t2; }
-        });
-
-        // Ricorsione: se nel round successivo ci sono nuovi BYE, propagali ancora
-        advanceAllByes(roundIdx + 1);
-    }
-
-    /* ── Dichiara il vincitore di una partita ── */
-    function setWinner(roundIdx, matchIdx, teamSlot) {
-        const match = bracket[roundIdx][matchIdx];
-        if (!match.t1 || !match.t2) return;  // non interagibile (BYE o TBD)
-
-        const newWinner = teamSlot === 1 ? match.t1 : match.t2;
-        if (match.winner === newWinner) return;  // già impostato, nessun cambio
-
-        // Se c'era già un vincitore diverso, pulisci a cascata prima
-        if (match.winner !== null) {
-            cascadeClear(roundIdx, matchIdx);
-        }
-
-        match.winner = newWinner;
-
-        // Avanza solo questo match al round successivo
-        advanceSingleMatch(roundIdx, matchIdx);
-
-        renderBracket();
-        saveBracket();
-        showToast(`🏆 ${esc(newWinner.caposquadra)} avanza al prossimo turno!`);
-    }
-
-    /* ── Pulisce a cascata dal round successivo a matchIdx in poi ── */
-    function cascadeClear(roundIdx, matchIdx) {
-        if (roundIdx >= bracket.length - 1) return;
-
-        const nextMatchIdx = Math.floor(matchIdx / 2);
-        const isFirst      = matchIdx % 2 === 0;
-        const nextMatch    = bracket[roundIdx + 1][nextMatchIdx];
-
-        // Rimuovi il valore propagato nel round successivo
-        if (isFirst) nextMatch.t1 = null;
-        else         nextMatch.t2 = null;
-
-        // Se il round successivo aveva già un vincitore, pulisci oltre
-        if (nextMatch.winner !== null) {
-            cascadeClear(roundIdx + 1, nextMatchIdx);
-            nextMatch.winner = null;
-        }
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       RENDER BRACKET
-    ══════════════════════════════════════════════════════════ */
-    function renderBracket() {
-        const rounds     = bracket;
-        const roundNames = buildRoundNames(rounds.length);
-        const BASE_H     = 105;
-        const BASE_GAP   = 16;
-
-        const finalMatch = rounds[rounds.length - 1][0];
-        const champion   = finalMatch ? finalMatch.winner : null;
-
-        let html = `<div class="bracket-container">`;
-
+        let html = "";
         rounds.forEach((matches, rIdx) => {
-            const factor = Math.pow(2, rIdx);
-            const slotH  = BASE_H * factor + BASE_GAP * (factor - 1) + BASE_GAP;
-
-            html += `<div class="round-col">`;
-            html += `<div class="round-header">${roundNames[rIdx]}</div>`;
-            html += `<div class="round-matches">`;
+            html += `<div class="round-section">
+                <div class="round-header">Turno ${rIdx + 1}</div>
+                <div class="round-content">`;
 
             matches.forEach((match, mIdx) => {
                 const { t1, t2, winner } = match;
-                const isBye  = (t1 !== null && t2 === null) || (t1 === null && t2 !== null);
-                const diff   = t1 && t2 ? Math.abs(t1.mmr_totale - t2.mmr_totale) : null;
+                const isBye = t2 === null;
                 const isDone = winner !== null;
-                const canVote = t1 !== null && t2 !== null && !isBye;
+                const canVote = t1 !== null && t2 !== null;
 
-                html += `<div class="match-wrapper" style="height:${slotH}px">`;
                 html += `<div class="match-card${isDone ? " match-done" : ""}">`;
-                html += `<div class="match-num">Partita ${rIdx + 1}.${mIdx + 1}${isBye ? " — BYE" : ""}</div>`;
+                html += `<div class="match-num">Match ${mIdx + 1} ${isBye ? "(BYE)" : ""}</div>`;
+                
+                // Primo sfidante
                 html += teamRowHTML(t1, 1, winner, canVote, rIdx, mIdx);
-                html += isBye
-                    ? `<div class="team-row"><span class="team-seed">—</span><span class="team-name tbd">— BYE —</span></div>`
-                    : teamRowHTML(t2, 2, winner, canVote, rIdx, mIdx);
-                if (diff !== null) {
-                    html += `<div class="match-diff">Δ MMR ${diff.toLocaleString("it-IT")}</div>`;
+
+                // Secondo sfidante o BYE
+                if (isBye) {
+                    html += `<div class="team-row" style="opacity:0.4; justify-content:center;">
+                                <span class="team-name" style="text-align:center; width:100%;">— BYE —</span>
+                             </div>`;
+                } else {
+                    html += teamRowHTML(t2, 2, winner, canVote, rIdx, mIdx);
                 }
-                html += `</div></div>`;
+                
+                html += `</div>`;
             });
 
             html += `</div></div>`;
         });
 
-        // Colonna campione
-        const cf = Math.pow(2, rounds.length);
-        const cs = BASE_H * cf + BASE_GAP * (cf - 1) + BASE_GAP;
-        html += `<div class="round-col">
-            <div class="round-header">🏆 Campione</div>
-            <div class="round-matches">
-            <div class="match-wrapper" style="height:${cs}px">`;
-        if (champion) {
-            html += `<div class="champion-box">
-                <div class="trophy">🏆</div>
-                <div class="label">Vincitore</div>
-                <div class="name">${esc(champion.caposquadra)}</div>
-                <div style="font-size:13px;color:var(--win);margin-top:6px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">${champion.mmr_totale.toLocaleString("it-IT")} MMR</div>
-            </div>`;
-        } else {
-            html += `<div class="champion-box">
-                <div class="trophy">🏆</div>
-                <div class="label">Vincitore</div>
-                <div class="name tbd">Da determinare</div>
-            </div>`;
-        }
-        html += `</div></div></div></div>`;
+        roundsArea.innerHTML = html;
 
-        bracketArea.innerHTML = html;
-
-        bracketArea.querySelectorAll(".vote-btn").forEach(btn => {
+        roundsArea.querySelectorAll(".vote-btn").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 setWinner(+btn.dataset.round, +btn.dataset.match, +btn.dataset.slot);
@@ -386,67 +272,81 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* ── HTML di una riga team ── */
     function teamRowHTML(team, slot, winner, canVote, rIdx, mIdx) {
-        if (!team) {
-            return `<div class="team-row">
-                <span class="team-seed">${slot}</span>
-                <span class="team-name tbd">TBD</span>
-            </div>`;
-        }
-        const isWinner = winner !== null && winner === team;
-        const isLoser  = winner !== null && winner !== team;
-        const rowCls   = isWinner ? " winner" : isLoser ? " loser" : "";
+        if (!team) return ``;
+        const isWinner = winner && winner.caposquadra === team.caposquadra;
+        const isLoser = winner && winner.caposquadra !== team.caposquadra;
+        const rowCls = isWinner ? " winner" : isLoser ? " loser" : "";
 
-        let badge = "";
+        let action = "";
         if (canVote && winner === null) {
-            badge = `<button class="vote-btn" data-round="${rIdx}" data-match="${mIdx}" data-slot="${slot}" title="Dichiara vincitore">▶</button>`;
+            action = `<button class="vote-btn" data-round="${rIdx}" data-match="${mIdx}" data-slot="${slot}">Vittoria</button>`;
         } else if (isWinner) {
-            badge = `<span class="win-badge">✓</span>`;
+            action = `<span class="win-badge">✓</span>`;
         }
+
+        const pts = squadre.find(s => s.caposquadra === team.caposquadra)?.punti || 0;
 
         return `<div class="team-row${rowCls}">
-            <span class="team-seed">${slot}</span>
+            <span class="team-pts">[${pts} pt]</span>
             <span class="team-name">${esc(team.caposquadra)}</span>
             <span class="team-mmr">${team.mmr_totale.toLocaleString("it-IT")}</span>
-            ${badge}
+            ${action}
         </div>`;
     }
 
-    /* ── ROUND NAMES ── */
-    function buildRoundNames(total) {
-        return Array.from({ length: total }, (_, i) => {
-            const fromEnd = total - 1 - i;
-            if (fromEnd === 0) return "Finale";
-            if (fromEnd === 1) return "Semifinale";
-            if (fromEnd === 2) return "Quarti di Finale";
-            return `Turno ${i + 1}`;
+    function renderLeaderboard() {
+        const section = document.getElementById("leaderboardSection");
+        const tbody = document.getElementById("leaderboardBody");
+
+        if (squadre.length === 0) {
+            section.style.display = "none";
+            return;
+        }
+        section.style.display = "block";
+
+        const sorted = [...squadre].sort((a, b) => {
+            if (b.punti !== a.punti) return b.punti - a.punti;
+            return b.mmr_totale - a.mmr_totale;
         });
-    }
 
-    /* ── UTILITIES ── */
-    function nextPow2(n) {
-        let p = 1;
-        while (p < n) p *= 2;
-        return p;
-    }
-
-    function emptyState(icon, title, text) {
-        return `<div class="empty-state">
-            <div class="icon">${icon}</div>
-            <h2>${title}</h2>
-            <p>${text}</p>
-        </div>`;
+        tbody.innerHTML = sorted.map((s, i) => {
+            let rankClass = i === 0 ? "rank-1" : i === 1 ? "rank-2" : i === 2 ? "rank-3" : "";
+            return `<tr class="${rankClass}">
+                <td><b>${i + 1}°</b></td>
+                <td style="font-weight:600">${esc(s.caposquadra)}</td>
+                <td class="pts-highlight">${s.punti}</td>
+                <td style="color:var(--accent); font-family:'Rajdhani',sans-serif">${s.mmr_totale.toLocaleString("it-IT")}</td>
+            </tr>`;
+        }).join("");
     }
 
     function esc(str) {
+        if(!str) return "";
         const d = document.createElement("div");
         d.textContent = str;
         return d.innerHTML;
     }
 
-    /* ── AUTO-LOAD ── */
-    // Prima prova a ripristinare un bracket esistente, poi carica le squadre
-    loadBracket().then(() => loadSquadre());
+    /* Dummy saveTournament & loadTournament per chiudere il file JS in autonomia */
+    async function saveTournament() {
+        try { await fetch("save_bracket.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ bracket: rounds }) }); } catch (err) {}
+    }
+    async function loadTournament() {
+        try {
+            const res = await fetch("get_bracket.php");
+            const json = await res.json();
+            if (!json.success || !json.bracket) return;
+            rounds = json.bracket;
+            
+            const teamsMap = new Map();
+            rounds.forEach(r => r.forEach(m => {
+                [m.t1, m.t2].forEach(t => { if (t) { teamsMap.set(t.caposquadra, t); if (t.mmr_totale > maxMMR) maxMMR = t.mmr_totale; } });
+            }));
+            squadre = Array.from(teamsMap.values());
+            recalculatePoints(); renderUI();
+        } catch (err) {}
+    }
 
-}); // DOMContentLoaded
+    loadTournament().then(() => { if(rounds.length === 0) loadSquadre(); });
+});

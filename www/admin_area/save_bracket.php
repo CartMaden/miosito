@@ -17,7 +17,7 @@ if (json_last_error() !== JSON_ERROR_NONE || !isset($data["bracket"])) {
     exit;
 }
 
-$file = __DIR__ . "/bracket_state.json";
+$file = __DIR__ . "/classifica_pubblica.json";
 
 $payload = [
     "saved_at" => date("c"),          // ISO 8601 timestamp
@@ -28,7 +28,7 @@ $payload = [
 $ok = file_put_contents($file, json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 if ($ok === false) {
-    echo json_encode(["success" => false, "message" => "Impossibile scrivere bracket_state.json"]);
+    echo json_encode(["success" => false, "message" => "Impossibile scrivere classifica_pubblica.json"]);
 } else {
     echo json_encode(["success" => true, "saved_at" => $payload["saved_at"]]);
 }

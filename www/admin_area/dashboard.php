@@ -30,16 +30,17 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
             <a href="../classifica/classifiche.html">Classifica</a>
             <a href="../news/news.html">News</a>
             <a href="../live/live.html">Live</a>
-            <a href="../iscrizione/iscrizione.html">Iscriviti</a>
-            <a href="squadre.html">Squadre</a>
-            <a href="matchmaking.html">Matchmaking</a>
+            <a href="../iscrizione/iscrizione.html">partecipa</a>
+            
+            <a href="squadre.php">Squadre</a>
+            <a href="matchmaking.php">Matchmaking</a>
             <button id="darkModeToggle">⏾</button>
         </nav>
     </header>
     <div class="wrapper">
         <main style="padding: 20px;">
-            <button class="btn-dashboard" onclick="location.href='matchmaking.html'">Avvia il matchmaking</button>
-            <button class="btn-dashboard" onclick="location.href='squadre.html'">Visualizza squadre Iscritte</button>
+            <button class="btn-dashboard" onclick="location.href='matchmaking.php'">Avvia il matchmaking</button>
+            <button class="btn-dashboard" onclick="location.href='squadre.php'">Visualizza squadre Iscritte</button>
             <button class="btn-dashboard" onclick="location.href='logout.php'" style="background-color: red;">Esci(Logout)</buton>
         </main>
     </div>
