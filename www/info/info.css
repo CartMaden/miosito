@@ -1,83 +1,276 @@
-
-
-/* Sezione contenuto */
-.content {
-    max-width: 1000px;
-    margin: 60px auto;
-    padding: 50px;
-    background: #5d5d5d;
-    border-radius: 14px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+/* ── INFO HERO ── */
+.info-hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 90px 40px 80px;
+  background-image: url('../photo/Sfondo_header.jpg');
+}
+.info-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 60px,
+    rgba(0,87,255,.04) 60px, rgba(0,87,255,.04) 62px
+  );
+}
+.info-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 60px;
+  background: #f4f6fa;
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+  transition: background 0.3s;
+}
+body.dark-mode .info-hero::after { background: #161616; }
+.info-hero-eyebrow {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #cc1a2e;
+  margin-bottom: 12px;
+  position: relative;
+}
+.info-hero h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 6vw, 72px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 16px;
+  line-height: 1;
+  position: relative;
+}
+.info-hero h1 span { color: #4a8aff; }
+.info-hero p {
+  color: rgba(255,255,255,.65);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+  position: relative;
 }
 
-/* Titolo principale */
-.content h1 {
-    font-size: 34px;
-    color: #003366;
-    margin-bottom: 10px;
+/* ── PAGE WRAPPER ── */
+.info-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
 }
 
-/* Sottotitoli */
-.content h2 {
-    margin-top: 40px;
-    font-size: 22px;
-    color: #003366;
-    position: relative;
-    padding-bottom: 8px;
+/* ── INTRO CARD ── */
+.intro-card {
+  background: #fff;
+  border: 1.5px solid #e8ecf4;
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+body.dark-mode .intro-card { background: #1e2230; border-color: #2a3148; }
+.intro-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, #003366, #cc1a2e);
+}
+.intro-card h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #003366;
+  margin: 0 0 6px;
+}
+body.dark-mode .intro-card h1 { color: #4a8aff; }
+.intro-card .subtitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #cc1a2e;
+  margin-bottom: 20px;
+}
+.intro-card p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #0f1923;
+  margin-bottom: 16px;
+}
+body.dark-mode .intro-card p { color: #f0f4ff; }
+.intro-card p:last-child { margin-bottom: 0; }
+.intro-card a { color: #0057ff; text-decoration: none; font-weight: 500; }
+.intro-card a:hover { text-decoration: underline; }
+
+/* ── SECTION LABEL ── */
+.info-section { margin-bottom: 32px; }
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.section-label-line {
+  flex: 1;
+  height: 1.5px;
+  background: #e8ecf4;
+}
+body.dark-mode .section-label-line { background: #2a3148; }
+.section-label h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0f1923;
+  margin: 0;
+  white-space: nowrap;
+}
+body.dark-mode .section-label h2 { color: #f0f4ff; }
+.section-emoji { font-size: 20px; flex-shrink: 0; }
+
+/* ── GAME CARDS ── */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+.game-card {
+  background: #fff;
+  border: 1.5px solid #e8ecf4;
+  border-left: 4px solid #cc1a2e;
+  border-radius: 10px;
+  padding: 20px 22px;
+  transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s;
+}
+body.dark-mode .game-card { background: #1e2230; border-color: #2a3148; border-left-color: #cc1a2e; }
+.game-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,30,80,.10); border-left-color: #0057ff; }
+body.dark-mode .game-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,.35); }
+.game-card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #0f1923;
+  margin-bottom: 6px;
+}
+body.dark-mode .game-card-title { color: #f0f4ff; }
+.game-card-detail {
+  font-size: 13px;
+  color: #5a6a7a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+body.dark-mode .game-card-detail { color: #8899bb; }
+.game-card-detail::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #0057ff;
+  flex-shrink: 0;
 }
 
-.content h2::after {
-    content: "";
-    width: 60px;
-    height: 3px;
-    background: #ff4655;
-    position: absolute;
-    left: 0;
-    bottom: 0;
+/* ── INFO SINGLE BLOCK ── */
+.info-block {
+  background: #fff;
+  border: 1.5px solid #e8ecf4;
+  border-radius: 10px;
+  overflow: hidden;
+}
+body.dark-mode .info-block { background: #1e2230; border-color: #2a3148; }
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e8ecf4;
+  transition: background 0.2s;
+}
+body.dark-mode .info-row { border-bottom-color: #2a3148; }
+.info-row:last-child { border-bottom: none; }
+.info-row:hover { background: #f4f6fa; }
+body.dark-mode .info-row:hover { background: #161616; }
+.info-block-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.info-row-body h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #003366;
+  margin: 0 0 4px;
+}
+body.dark-mode .info-row-body h3 { color: #4a8aff; }
+.info-row-body p { font-size: 14px; color: #5a6a7a; line-height: 1.7; margin: 0; }
+body.dark-mode .info-row-body p { color: #8899bb; }
+
+/* ── WHY JOIN BANNER ── */
+.why-banner {
+  background: linear-gradient(135deg, #003366, #0044cc);
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+body.dark-mode .why-banner { background: linear-gradient(135deg, #0a1530, #0d2060); }
+.why-banner::after {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+}
+.why-banner h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 12px;
+}
+.why-banner p {
+  color: rgba(255,255,255,.8);
+  font-size: 15px;
+  line-height: 1.8;
+  max-width: 680px;
+  margin: 0;
+  position: relative;
 }
 
-/* Titoli h3 */
-.content h3 {
-    margin-top: 25px;
-    color: #333;
+/* ── CONTACT CARD ── */
+.contact-card {
+  background: #fff;
+  border: 1.5px solid #e8ecf4;
+  border-radius: 10px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
+body.dark-mode .contact-card { background: #1e2230; border-color: #2a3148; }
+.contact-icon { font-size: 32px; flex-shrink: 0; }
+.contact-card p { font-size: 15px; color: #0f1923; margin: 0; line-height: 1.6; }
+body.dark-mode .contact-card p { color: #f0f4ff; }
+.contact-card a { color: #0057ff; font-weight: 500; text-decoration: none; }
+.contact-card a:hover { text-decoration: underline; }
 
-/* Paragrafi */
-.content p {
-    line-height: 1.8;
-    margin-bottom: 20px;
-    font-size: 16px;
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .info-hero { padding: 60px 20px 70px; }
+  .intro-card { padding: 24px 20px 24px 28px; }
+  .why-banner { padding: 28px 24px; }
+  .contact-card { flex-direction: column; align-items: flex-start; }
 }
-
-/* Lista giochi */
-.content ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-
-.content ul li {
-    background: #b0b0b0;
-    margin: 12px 0;
-    padding: 15px 20px;
-    border-radius: 8px;
-    border-left: 5px solid #ff4655;
-    transition: 0.3s ease;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .content {
-        margin: 30px 15px;
-        padding: 30px 20px;
-    }
-
-    .content h1 {
-        font-size: 24px;
-    }
-
-    .content h2 {
-        font-size: 18px;
-    }
-}
-

@@ -1,222 +1,300 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torneo ITS Lazio Digital</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="./condivisi/headerdarkmode.css">
-    <link rel="shortcut icon" href="../photo/favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torneo ITS Lazio Digital</title>
+  <link rel="stylesheet" href="./condivisi/headerdarkmode.css">
+  <link rel="stylesheet" href="index.css">
+  <link rel="shortcut icon" href="./photo/favicon.ico">
 </head>
 <body>
 
-<!-- HEADER + NAV -->
+<!-- HEADER -->
 <header>
-    <a href="index.html"><img src="./photo/Logo_Laziodigital.png" alt="logo"></a>
-    <nav>
-        <a href="./info/info.html">Info</a>
-        <a href="./calendario/calendario.html">Calendario</a>
-        <a href="./news/news.html">News</a>
-        <a href="./live/live.html">Live</a>
-        <a href="./merchandise/merchandise.html">Merchandise</a>
-        <a href="./iscrizione/iscrizione.html">Partecipa</a>
-<label class="switch" title="Toggle dark mode">
-  <input type="checkbox" id="darkModeToggle">
-  <span class="track"></span>
-  <span class="thumb"></span>
-</label>
-    </nav>
+  <a href="index.html"><img src="./photo/Logo_Laziodigital.png" alt="logo"></a>
+  <nav>
+    <a href="./info/info.html">Info</a>
+    <a href="./calendario/calendario.html">Calendario</a>
+    <a href="./news/news.html">News</a>
+    <a href="./live/live.html">Live</a>
+    <a href="./merchandise/merchandise.html">Merchandise</a>
+    <a href="./iscrizione/iscrizione.html">Partecipa</a>
+    <label class="switch" title="Toggle dark mode">
+      <input type="checkbox" id="darkModeToggle">
+      <span class="track"></span>
+      <span class="thumb"></span>
+    </label>
+  </nav>
 </header>
 
-<!-- SEZIONE index -->
-<section id="index" class="hero" style="background-image: url('./photo/Sfondo_header.jpg');">
-    <h1>Torneo ITS Lazio Digital</h1>
-    <p>Benvenuti al torneo di gaming ufficiale dell'ITS Lazio Digital!</p>
-</section>
+<!-- HERO -->
+<div class="index-hero">
+  <div class="index-hero-eyebrow">ITS Lazio Digital Gaming</div>
+  <h1>E-Olimpiadi <span>2026</span></h1>
+  <p>Benvenuti al torneo di gaming ufficiale dell'ITS Lazio Digital. Competizione, strategia e fair play.</p>
+  <div class="hero-cta">
+    <a href="./iscrizione/iscrizione.html" class="btn-primary">Partecipa ora</a>
+    <a href="./info/info.html" class="btn-secondary">Scopri di più</a>
+  </div>
+</div>
 
-<!-- SEZIONE GIOCHI TORNEO -->
-<section id="giochi-torneo">
-    <h2 style="text-align: center;">Giochi Principali del Torneo</h2>
+<!-- GIOCHI TORNEO -->
+<div class="page-section">
+  <div class="section-head">
+    <div class="section-eyebrow">Competizioni ufficiali</div>
+    <h2 class="section-title">Giochi del Torneo</h2>
+  </div>
 
-    <div class="games-container">
+  <div class="games-container">
 
-        <!-- VALORANT -->
-        <a href="./calendario/calendario.html" class="game-card valorant-box" >
-            <div class="media-container">
-                        <video muted loop preload="none">
-            <source src="./photo/malphitedaniele.mp4" type="video/mp4">
+    <!-- VALORANT -->
+    <div class="game-card valorant-box" data-game="valorant">
+      <div class="media-container">
+        <video muted loop preload="none">
+          <source src="./photo/malphitedaniele.mp4" type="video/mp4">
         </video>
-            <img src="./photo/valorant.jpg" alt="Valorant"></div>
-            <h3>Valorant</h3>
-            <p>
-                Sparatutto tattico 5v5 sviluppato da Riot Games.
-                Combina abilità uniche degli agenti con gameplay strategico.
-            </p>
-            <p><strong>Date Match:</strong> 12/03/2026 – 18/03/2026</p>
-        </a>
-
-        <!-- LEAGUE OF LEGENDS -->
-        <a href="./calendario/calendario.html" class="game-card lol-box">
-            <img src="./photo/lol.jpg" alt="League of Legends">
-            <h3>League of Legends</h3>
-            <p>
-                MOBA competitivo 5v5 in cui due squadre si sfidano per distruggere il Nexus avversario.
-                Strategia e coordinazione sono fondamentali.
-            </p>
-            <p><strong>Date Match:</strong> 20/03/2026 – 26/03/2026</p>
-        </a>
-
-        <!-- RAINBOW SIX SIEGE -->
-        <a href="./calendario/calendario.html" class="game-card r6-box">
-            <img src="./photo/r6.jpg" alt="Rainbow Six Siege">
-            <h3>Rainbow Six Siege</h3>
-            <p>
-                FPS tattico basato su attacco e difesa tra operatori specializzati.
-                Focus su strategia, distruzione ambientale e teamwork.
-            </p>
-            <p><strong>Date Match:</strong> 28/03/2026 – 04/04/2026</p>
-        </a>
-
+        <img src="./photo/valorant.jpg" alt="Valorant">
+      </div>
+      <div class="game-card-body">
+        <div class="game-card-tag">Sparatutto Tattico &middot; 5v5</div>
+        <h3>Valorant</h3>
+        <p>Sparatutto tattico sviluppato da Riot Games. Combina abilità uniche degli agenti con gameplay strategico.</p>
+        <div class="game-dates"><strong>Date Match:</strong> 12/03/2026 &ndash; 18/03/2026</div>
+      </div>
     </div>
-</section>
+
+    <!-- LEAGUE OF LEGENDS -->
+    <div class="game-card lol-box" data-game="lol">
+      <div class="media-container">
+        <img src="./photo/lol.jpg" alt="League of Legends">
+      </div>
+      <div class="game-card-body">
+        <div class="game-card-tag">MOBA Competitivo &middot; 5v5</div>
+        <h3>League of Legends</h3>
+        <p>Due squadre si sfidano per distruggere il Nexus avversario. Strategia e coordinazione sono fondamentali.</p>
+        <div class="game-dates"><strong>Date Match:</strong> 20/03/2026 &ndash; 26/03/2026</div>
+      </div>
+    </div>
+
+    <!-- RAINBOW SIX SIEGE -->
+    <div class="game-card r6-box" data-game="r6">
+      <div class="media-container">
+        <img src="./photo/r6.jpg" alt="Rainbow Six Siege">
+      </div>
+      <div class="game-card-body">
+        <div class="game-card-tag">FPS Tattico &middot; 5v5</div>
+        <h3>Rainbow Six Siege</h3>
+        <p>FPS basato su attacco e difesa tra operatori specializzati. Focus su strategia e teamwork.</p>
+        <div class="game-dates"><strong>Date Match:</strong> 28/03/2026 &ndash; 04/04/2026</div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- INFO TORNEO -->
-<section id="info">
-    <h2>Informazioni sul Torneo</h2>
-    <p>Benvenuti alla prima edizione del Torneo di Gaming "E-Olimpiadi Lazio Digital", questo torneo nasce proprio da un iniziativa dei ragazzi frequentanti l'ITS Lazio Digital</p>
-</section>
-
+<div class="page-section">
+  <div class="section-head">
+    <div class="section-eyebrow">Chi siamo</div>
+    <h2 class="section-title">Informazioni sul Torneo</h2>
+  </div>
+  <div class="info-banner">
+    <p>Benvenuti alla prima edizione del Torneo di Gaming <strong>E-Olimpiadi Lazio Digital</strong>. Questo torneo nasce da un'iniziativa dei ragazzi frequentanti l'ITS Lazio Digital, con l'obiettivo di valorizzare le competenze trasversali legate al mondo degli esports: problem solving, comunicazione efficace e spirito di squadra.</p>
+  </div>
+</div>
 
 <!-- NEWS -->
-<section id="news" class="news-section">
-    <h2 style="text-align: center;">Ultime Notizie</h2>
+<div class="page-section">
+  <div class="section-head">
+    <div class="section-eyebrow">Aggiornamenti</div>
+    <h2 class="section-title">Ultime Notizie</h2>
+  </div>
 
-    <div class="news-container">
+  <div class="news-container">
 
-        <!-- NEWS VALORANT -->
-<a href="./news/news.html" class="news-card valorant-box" >
-    <div class="media-container">
-            <video muted loop preload="none">
-            <source src="./photo/malphitedaniele.mp4" type="video/mp4">
+    <!-- NEWS VALORANT -->
+    <a href="./news/news.html" class="news-card valorant-box">
+      <div class="news-media">
+        <video muted loop preload="none">
+          <source src="./photo/malphitedaniele.mp4" type="video/mp4">
         </video>
-    <img src="./photo/valorant.jpg" alt="News Valorant"></div>
+        <img src="./photo/valorant.jpg" alt="News Valorant">
+      </div>
+      <div class="news-content">
+        <div class="news-tag">Valorant</div>
+        <h3>Inizio Torneo Ufficiale</h3>
+        <p>Il torneo ufficiale ITS Lazio Digital inizierà il 1° marzo 2026. Le squadre selezionate si sfideranno in match ad alta intensità.</p>
+        <span class="read-more">Leggi di più &rarr;</span>
+      </div>
+    </a>
 
-    <div class="news-content">
-        <h3>Valorant – Inizio Torneo</h3>
-        <p>
-            Il torneo ufficiale ITS Lazio Digital inizierà il 1° marzo 2026.
-            Le squadre selezionate si sfideranno in match ad alta intensità.
-        </p>
-        <span class="read-more">Leggi di più →</span>
-    </div>
-</a>
-        <!-- NEWS LOL -->
-        <a href="./news/news.html" class="news-card lol-box">
-            <img src="./photo/lol.jpg" alt="News League of Legends">
-            <div class="news-content">
-            <h3>League of Legends – Squadre Confermate</h3>
-            <p>
-                Confermate le squadre partecipanti al torneo LoL.
-                Prepariamoci a sfide strategiche e giocate epiche.
-            </p>
-            <span class="read-more">Leggi di più →</span>
-            </div>
-        </a>
-        
+    <!-- NEWS LOL -->
+    <a href="./news/news.html" class="news-card lol-box">
+      <div class="news-media">
+        <img src="./photo/lol.jpg" alt="News League of Legends">
+      </div>
+      <div class="news-content">
+        <div class="news-tag">League of Legends</div>
+        <h3>Squadre Confermate</h3>
+        <p>Confermate le squadre partecipanti al torneo LoL. Prepariamoci a sfide strategiche e giocate epiche.</p>
+        <span class="read-more">Leggi di più &rarr;</span>
+      </div>
+    </a>
 
-        <!-- NEWS R6 -->
-        <a href="./news/news.html" class="news-card r6-box">
-            <img src="./photo/r6.jpg" alt="News Rainbow Six Siege">
-            <div class="news-content">
-            <h3>Rainbow Six – Sfide ad Alta Tensione</h3>
-            <p>
-                Rainbow Six Siege promette azione e tattica.
-                Attacco e difesa saranno decisivi per la vittoria.
-            </p>
-            <span class="read-more">Leggi di più →</span>
-            </div>
-        </a>
+    <!-- NEWS R6 -->
+    <a href="./news/news.html" class="news-card r6-box">
+      <div class="news-media">
+        <img src="./photo/r6.jpg" alt="News Rainbow Six Siege">
+      </div>
+      <div class="news-content">
+        <div class="news-tag">Rainbow Six</div>
+        <h3>Sfide ad Alta Tensione</h3>
+        <p>Rainbow Six Siege promette azione e tattica. Attacco e difesa saranno decisivi per la vittoria.</p>
+        <span class="read-more">Leggi di più &rarr;</span>
+      </div>
+    </a>
 
-    </div>
-</section>
-
-
-
-<div> <!--SLIDESHOW-->
-
-    <h2 style="text-align: center;  margin-bottom: 15px;">I nostri soci fondatori:</h2>
-
-    <div class="slideshow-container">
-
-        <div class="mySlides fade">
-            <img src="./photo/Sponsor/citta-metropolitana-di-roma-capitale-369153.660x368.jpg">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/sabina.jpg">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/pomezia-1.jpg">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/algoritmo.png">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/job-2.png">
-        </div>
-        
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/logo-1.png">
-        </div>        
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/LOGO-MEDIAFARM-COLOR-1-2048x929.png">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/logo-wolf.png">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/logo.png">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/opir.png">
-        </div>
-        
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/orientacademy.png">
-        </div>
-
-        <div class="mySlides fade">
-        <img src="./photo/Sponsor/sapienza-big.png">
-        </div>
-    </div>
-
-
+  </div>
 </div>
-<br>
-<br>
-<footer class="site-footer">
-        <div class="footer-left">
-        <p><a href="./admin_area/login.php" class="hidden-link" >Area riservata</a></p>
-    </div>
-    <div class="footer-center">
-        <p class="footer-title">Torneo ITS Lazio Digital Gaming</p>
-        <p class="footer-copy">© 2026 All rights reserved.</p>
-    </div>
 
-    <div class="footer-right">
-        <p> <a href="tel:+391234567890">☎ Ivan He — +39 328 169 3209</a></p>
-        <p><a href="tel:+393518152561">☎ Emanuele Campus — +39 351 815 2561</a></p>
-        <p> <a href="mailto:itstorneoesports@gmail.com">✉itstorneoesports@gmail.com</a></p>
-    </div>
+<!-- SPONSORS -->
+<div class="sponsors-section">
+  <div class="sponsors-label">I nostri soci fondatori</div>
+  <div class="slideshow-container">
+    <div class="mySlides fade"><img src="./photo/Sponsor/citta-metropolitana-di-roma-capitale-369153.660x368.jpg" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/sabina.jpg" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/pomezia-1.jpg" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/algoritmo.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/job-2.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/logo-1.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/LOGO-MEDIAFARM-COLOR-1-2048x929.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/logo-wolf.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/logo.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/opir.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/orientacademy.png" alt="sponsor"></div>
+    <div class="mySlides fade"><img src="./photo/Sponsor/sapienza-big.png" alt="sponsor"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-left">
+    <p><a href="./admin_area/login.php" class="hidden-link">Area riservata</a></p>
+  </div>
+  <div class="footer-center">
+    <p class="footer-title">Torneo ITS Lazio Digital Gaming</p>
+    <p class="footer-copy">&copy; 2026 All rights reserved.</p>
+    <p><a href="./admin_area/login.php">Area riservata</a></p>
+  </div>
+  <div class="footer-right">
+    <p><a href="tel:+393281693209">&#9742; Ivan He &mdash; +39 328 169 3209</a></p>
+    <p><a href="tel:+393518152561">&#9742; Emanuele Campus &mdash; +39 351 815 2561</a></p>
+    <p><a href="mailto:itstorneoesports@gmail.com">&#9993; itstorneoesports@gmail.com</a></p>
+  </div>
 </footer>
-</body>
-<script src="slideshow.js"></script>
+
+<script>
+  // Slideshow
+  let slideIndex = 0;
+  (function showSlides() {
+    const slides = document.getElementsByClassName('mySlides');
+    for (let i = 0; i < slides.length; i++) slides[i].style.display = 'none';
+    slideIndex = (slideIndex % slides.length) + 1;
+    slides[slideIndex - 1].style.display = 'block';
+    setTimeout(showSlides, 2000);
+  })();
+
+  // Video hover
+  document.querySelectorAll('.media-container, .news-media').forEach(container => {
+    const video = container.querySelector('video');
+    if (!video) return;
+    container.addEventListener('mouseenter', () => video.play());
+    container.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+  });
+</script>
+
+<!-- GAME MODAL -->
+<div class="game-modal-overlay" id="gameModal">
+  <div class="game-modal-card" id="gameModalCard">
+    <button class="game-modal-close" id="gameModalClose">&#x2715;</button>
+    <div class="game-modal-banner">
+      <img id="gameModalImg" src="" alt="">
+      <div class="game-modal-banner-overlay"></div>
+    </div>
+    <div class="game-modal-body">
+      <div class="game-modal-tag" id="gameModalTag"></div>
+      <h2 id="gameModalTitle"></h2>
+      <p id="gameModalDesc"></p>
+      <div class="game-modal-details" id="gameModalDetails"></div>
+      <a href="./calendario/calendario.html" class="game-modal-cta" id="gameModalCta">Vedi il Calendario &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const games = {
+    valorant: {
+      tag: 'Sparatutto Tattico · 5v5',
+      title: 'Valorant',
+      img: './photo/valorant.jpg',
+      theme: 'valorant-box',
+      desc: 'Valorant è uno sparatutto tattico 5v5 sviluppato da Riot Games. Due squadre si alternano nei ruoli di attaccanti e difensori su mappe ricche di angoli strategici. Ogni agente possiede abilità uniche che si integrano con il classico gameplay basato sulla precisione di mira. La comunicazione, il posizionamento e la gestione dell’economia sono fondamentali per la vittoria.',
+      dates: '12/03/2026 &ndash; 18/03/2026',
+      format: '5 giocatori + 3 riserve per team &middot; Eliminazione diretta'
+    },
+    lol: {
+      tag: 'MOBA Competitivo · 5v5',
+      title: 'League of Legends',
+      img: './photo/lol.jpg',
+      theme: 'lol-box',
+      desc: 'League of Legends è il MOBA più giocato al mondo. Due squadre da 5 si sfidano su una mappa simmetrica con l’obiettivo di distruggere il Nexus avversario. La scelta dei campioni, la gestione delle risorse e la coordinazione tra le corsie determinano il risultato. Ogni partita richiede adattabilità e pensiero tattico in tempo reale.',
+      dates: '20/03/2026 &ndash; 26/03/2026',
+      format: '5 giocatori + 3 riserve per team &middot; Eliminazione diretta'
+    },
+    r6: {
+      tag: 'FPS Tattico · 5v5',
+      title: 'Rainbow Six Siege',
+      img: './photo/r6.jpg',
+      theme: 'r6-box',
+      desc: 'Rainbow Six Siege è un FPS tattico ad alta intensità basato su attacco e difesa tra operatori specializzati. La distruzione ambientale e i gadget unici di ogni operatore aprono infinite possibilità strategiche. Ogni round dura pochi minuti, ma richiede comunicazione perfetta, lettura del gioco avversario e reazioni fulminee.',
+      dates: '28/03/2026 &ndash; 04/04/2026',
+      format: '5 giocatori + 3 riserve per team &middot; Eliminazione diretta'
+    }
+  };
+
+  const overlay = document.getElementById('gameModal');
+  const card    = document.getElementById('gameModalCard');
+
+  function openGameModal(key) {
+    const g = games[key];
+    card.className = 'game-modal-card ' + g.theme;
+    document.getElementById('gameModalImg').src = g.img;
+    document.getElementById('gameModalTag').textContent = g.tag;
+    document.getElementById('gameModalTitle').textContent = g.title;
+    document.getElementById('gameModalDesc').textContent = g.desc;
+    document.getElementById('gameModalDetails').innerHTML =
+      '<div class="gmd-row"><span class="gmd-label">&#128197; Date Match</span><span class="gmd-val">' + g.dates + '</span></div>' +
+      '<div class="gmd-row"><span class="gmd-label">&#128101; Formato</span><span class="gmd-val">' + g.format + '</span></div>';
+    card.scrollTop = 0;
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.querySelectorAll('.game-card[data-game]').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => openGameModal(el.dataset.game));
+  });
+
+  function closeGameModal() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('gameModalClose').addEventListener('click', closeGameModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeGameModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGameModal(); });
+</script>
 <script src="./condivisi/darkmode.js"></script>
+</body>
 </html>

@@ -1,22 +1,213 @@
-
-#twitch-live-container{
-    max-width:1200px;
-    margin:0 auto;
-    padding:20px;
-    text-align:center;
-    font-family:Arial, sans-serif;
-    
+/* ── LIVE HERO ── */
+.live-hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 90px 40px 80px;
+  background-image: url('../photo/Sfondo_header.jpg');
+}
+.live-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 60px,
+    rgba(0,87,255,.04) 60px, rgba(0,87,255,.04) 62px
+  );
+}
+.live-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 60px;
+  background: #f4f6fa;
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+  transition: background 0.3s;
+}
+body.dark-mode .live-hero::after { background: #161616; }
+.live-hero-eyebrow {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #cc1a2e;
+  margin-bottom: 12px;
+  position: relative;
+}
+.live-hero h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 6vw, 72px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 16px;
+  line-height: 1;
+  position: relative;
+}
+.live-hero h1 span { color: #4a8aff; }
+.live-hero p {
+  color: rgba(255,255,255,.65);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+  position: relative;
 }
 
-#countdown{
-    font-size:20px;
-    margin-bottom:20px;
+/* ── PAGE WRAPPER ── */
+.live-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px 80px;
 }
 
-#iframes{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:20px;
+/* ── COUNTDOWN CARD ── */
+.countdown-card {
+  background: #fff;
+  border: 1.5px solid #e8ecf4;
+  border-radius: 12px;
+  padding: 18px 28px;
+  margin-bottom: 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+body.dark-mode .countdown-card { background: #1e2230; border-color: #2a3148; }
+.countdown-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #003366, #cc1a2e);
 }
 
+#live-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0f1923;
+  margin: 0 0 12px;
+}
+body.dark-mode #live-title { color: #f0f4ff; }
+
+/* countdown digits */
+.countdown-digits {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.countdown-num {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1;
+  color: #003366;
+  background: #f4f6fa;
+  border: 1.5px solid #e8ecf4;
+  border-radius: 8px;
+  min-width: 62px;
+  padding: 8px 8px 6px;
+  text-align: center;
+  transition: color 0.3s;
+}
+body.dark-mode .countdown-num { background: #161616; border-color: #2a3148; color: #4a8aff; }
+.countdown-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5a6a7a;
+}
+body.dark-mode .countdown-label { color: #8899bb; }
+.countdown-sep {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: #cc1a2e;
+  line-height: 1;
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+/* live badge */
+#live-now-badge {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #cc1a2e;
+  margin-top: 8px;
+}
+#live-now-badge.visible { display: flex; }
+.live-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #cc1a2e;
+  animation: livePulse 1.2s infinite;
+}
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(1.3); }
+}
+
+/* ── TWITCH SECTION LABEL ── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.section-label-line { flex: 1; height: 1.5px; background: #e8ecf4; }
+body.dark-mode .section-label-line { background: #2a3148; }
+.section-label h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0f1923;
+  margin: 0;
+  white-space: nowrap;
+}
+body.dark-mode .section-label h2 { color: #f0f4ff; }
+.section-emoji { font-size: 20px; flex-shrink: 0; }
+
+/* ── TWITCH CONTAINER ── */
+.twitch-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+.twitch-container iframe {
+  border-radius: 10px;
+  border: 1.5px solid #e8ecf4;
+  display: block;
+}
+body.dark-mode .twitch-container iframe { border-color: #2a3148; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .live-hero { padding: 60px 20px 70px; }
+  .countdown-card { padding: 28px 20px; }
+  .countdown-num { font-size: 38px; min-width: 68px; padding: 10px 8px 8px; }
+  .twitch-container iframe { width: 100% !important; max-width: 100%; }
+}

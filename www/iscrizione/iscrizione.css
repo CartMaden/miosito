@@ -301,3 +301,66 @@
             .mmr-row { grid-template-columns: 1fr; }
             .form-card h2 { font-size: 22px; }
         }
+.live-hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 90px 40px 80px;
+  background-image: url('../photo/Sfondo_header.jpg');
+}
+.live-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 60px,
+    rgba(0,87,255,.04) 60px, rgba(0,87,255,.04) 62px
+  );
+}
+.live-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 60px;
+  background: #f4f6fa;
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+  transition: background 0.3s;
+}
+.live-hero h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 6vw, 72px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 16px;
+  line-height: 1;
+  position: relative;
+}
+.live-hero h1 span { color: #4a8aff; }
+.live-hero p {
+  color: rgba(255,255,255,.65);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+  position: relative;
+}
+
+.live-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px 80px;
+}
+
+body.dark-mode .live-hero::after { background: #161616; }
+.live-hero-eyebrow {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #cc1a2e;
+  margin-bottom: 12px;
+  position: relative;
+}
