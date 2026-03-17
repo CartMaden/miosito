@@ -374,3 +374,4 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
 /* ── INIT ── */
 buildModals();
 loadSquadre();
+/*ciao ivan */
