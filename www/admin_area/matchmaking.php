@@ -16,21 +16,30 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
     <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
     <link rel="stylesheet" href="matchmaking.css">
 </head>
-<body class="dark-mode">
+<body>
 
 <header>
     <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>
-        <a href="../info/info.html">Info</a>
-        <a href="../calendario/calendario.html">Calendario</a>
-        <a href="../classifica/classifica.html">Classifica</a>
-        <a href="../news/news.html">News</a>
-        <a href="../live/live.html">Live</a>
-        <a href="../iscrizione/iscrizione.html">partecipa</a>
-        <a href="../admin_area/dashboard.php">Dashboard</a>
-        <a href="squadre.php">Squadre</a>
-        <a href="matchmaking.php">Matchmaking</a>
-        <button id="darkModeToggle">⏾</button>
+        <div class="nav-links" id="navLinks">
+            <a href="../info/info.html">Info</a>
+            <a href="../calendario/calendario.html">Calendario</a>
+            <a href="../classifica/classifica.html">Classifica</a>
+            <a href="../news/news.html">News</a>
+            <a href="../live/live.html">Live</a>
+            <a href="../iscrizione/iscrizione.html">Partecipa</a>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="squadre.php">Squadre</a>
+            <a href="matchmaking.php">Matchmaking</a>
+        </div>
+        <label class="switch" title="Toggle dark mode">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="track"></span>
+            <span class="thumb"></span>
+        </label>
+        <button class="hamburger" id="hamburger" aria-label="Apri menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 </header>
 
@@ -81,6 +90,8 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 
 <div class="toast" id="toast"></div>
 
+<!-- darkmode.js gestisce già hamburger + toggle: non duplicare lo script inline -->
+<script src="../condivisi/darkmode.js"></script>
 <script src="matchmaking.js"></script>
 </body>
 </html>

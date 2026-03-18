@@ -1,5 +1,5 @@
 //(anno, mese-1, giorno, ora, minuti)
-var liveDate = new Date(2027, 2, 8, 16, 0, 0); 
+var liveDate = new Date(2026, 4, 15, 16, 0, 0); 
 
 var countdownElement = document.getElementById("countdown");
 var titleElement = document.getElementById("live-title");
