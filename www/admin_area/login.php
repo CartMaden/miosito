@@ -66,12 +66,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <header>
     <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>
+        <a href="../info/info.html">Info</a>
         <a href="../calendario/calendario.html">Calendario</a>
         <a href="../news/news.html">News</a>
-        <a href="../info/info.html">Info</a>
         <a href="../live/live.html">Live</a>
-        <a href="../iscrizione/iscrizione.html">partecipa</a>
-        <a href="../admin_area/login.php">Dashboard</a>
+        <a href="../merchandise/merchandise.php">Shop</a>
+        <a href="../iscrizione/iscrizione.html">Partecipa</a>
         <button id="darkModeToggle">⏾</button> 
     </nav>
 </header>
