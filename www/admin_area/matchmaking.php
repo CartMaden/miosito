@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
     header("Location: login.php");
     exit;
@@ -27,6 +26,7 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
             <a href="../classifica/classifica.html">Classifica</a>
             <a href="../news/news.html">News</a>
             <a href="../live/live.html">Live</a>
+            <a href="../merchandise/merchandise.php">Shop</a>
             <a href="../iscrizione/iscrizione.html">Partecipa</a>
             <a href="dashboard.php">Dashboard</a>
             <a href="squadre.php">Squadre</a>
@@ -46,14 +46,30 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 <div class="page-hero">
     <div class="hero-left">
         <h1>Match<span>making</span></h1>
-        <p>Torneo a Punti (Svizzera) — Sviluppo Orizzontale</p>
+        <p>Torneo a Punti — Sviluppo Orizzontale</p>
     </div>
     <div class="hero-actions">
         <button class="btn btn-outline" id="btnRefresh">↺ Ricarica squadre</button>
         <button class="btn btn-primary" id="btnNextRound" disabled>⚡ Nuovo Turno</button>
         <button class="btn btn-danger"  id="btnReset" style="display:none">✕ Reset</button>
-        <button class="btn btn-win" id="btnFinish" style="display:none" disabled>🏆 Concludi Torneo</button>
+        <button class="btn btn-win"     id="btnFinish" style="display:none" disabled>🏆 Concludi Torneo</button>
     </div>
+</div>
+
+<!-- ── GAME TABS ── -->
+<div class="game-tabs-bar">
+    <button class="game-tab active" data-gioco="valorant">
+        <span class="gt-icon">🎯</span>
+        <span class="gt-label">Valorant</span>
+    </button>
+    <button class="game-tab" data-gioco="r6">
+        <span class="gt-icon">🛡️</span>
+        <span class="gt-label">Rainbow Six</span>
+    </button>
+    <button class="game-tab" data-gioco="lol">
+        <span class="gt-icon">⚔️</span>
+        <span class="gt-label">League of Legends</span>
+    </button>
 </div>
 
 <div class="stats-bar" id="statsBar">
@@ -68,7 +84,7 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
         <div class="empty-state">
             <div class="icon">🎮</div>
             <h2>Nessun turno generato</h2>
-            <p>Clicca "Ricarica squadre" per iniziare, poi genera il primo turno.</p>
+            <p>Seleziona un gioco, poi clicca "Ricarica squadre" per iniziare.</p>
         </div>
     </div>
 
@@ -90,7 +106,19 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 
 <div class="toast" id="toast"></div>
 
-<!-- darkmode.js gestisce già hamburger + toggle: non duplicare lo script inline -->
+<footer class="site-footer">
+    <div class="footer-center">
+        <p class="footer-title">Torneo ITS Lazio Digital Gaming</p>
+        <p class="footer-copy">© 2026 All rights reserved.</p>
+    </div>
+    <div class="footer-right">
+        <p><a href="tel:+393281693209">☎ Ivan He — +39 328 169 3209</a></p>
+        <p><a href="tel:+393518152561">☎ Emanuele Campus — +39 351 815 2561</a></p>
+        <p><a href="mailto:itstorneoesports@gmail.com">✉ itstorneoesports@gmail.com</a></p>
+    </div>
+</footer>
+
+
 <script src="../condivisi/darkmode.js"></script>
 <script src="matchmaking.js"></script>
 </body>

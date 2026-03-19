@@ -24,7 +24,7 @@
             <a href="../live/live.html">Live</a>
             <a href="../merchandise/merchandise.php">Shop</a>
             <a href="../iscrizione/iscrizione.html">Partecipa</a>
-            <a href="../admin_area/login.php" id="linkDashboard" style="display: none;">Dashboard</a>
+            <a href="../admin_area/login.php" id="linkDashboard" style="display:none;">Dashboard</a>
         </div>
         <label class="switch" title="Toggle dark mode">
             <input type="checkbox" id="darkModeToggle">
@@ -46,6 +46,22 @@
         <span class="dot-pulse"></span> Live
     </div>
 </section>
+
+<!-- GAME TABS -->
+<div class="game-tabs-bar">
+    <button class="game-tab-btn active" data-gioco="valorant">
+        <span class="gtb-icon">🎯</span>
+        <span class="gtb-label">Valorant</span>
+    </button>
+    <button class="game-tab-btn" data-gioco="r6">
+        <span class="gtb-icon">🛡️</span>
+        <span class="gtb-label">Rainbow Six Siege</span>
+    </button>
+    <button class="game-tab-btn" data-gioco="lol">
+        <span class="gtb-icon">⚔️</span>
+        <span class="gtb-label">League of Legends</span>
+    </button>
+</div>
 
 <!-- STATS BAR -->
 <div class="stats-bar">
@@ -133,6 +149,5 @@
         }
     });
 </script>
-
 </body>
 </html>

@@ -27,6 +27,7 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
             <a href="../classifica/classifica.html">Classifica</a>
             <a href="../news/news.html">News</a>
             <a href="../live/live.html">Live</a>
+            <a href="../merchandise/merchandise.php">Shop</a>
             <a href="../iscrizione/iscrizione.html">Partecipa</a>
             <a href="dashboard.php">Dashboard</a>
             <a href="squadre.php">Squadre</a>

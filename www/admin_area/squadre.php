@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
     header("Location: login.php");
     exit;
@@ -29,6 +28,7 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
             <a href="../classifica/classifica.html">Classifica</a>
             <a href="../news/news.html">News</a>
             <a href="../live/live.html">Live</a>
+            <a href="../merchandise/merchandise.php">Shop</a>
             <a href="../iscrizione/iscrizione.html">Partecipa</a>
             <a href="dashboard.php">Dashboard</a>
             <a href="squadre.php">Squadre</a>
@@ -48,6 +48,19 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 <div class="page-hero">
     <h1>Squadre Iscritte</h1>
     <p>Tutte le squadre registrate al Torneo ITS Lazio Digital Gaming</p>
+</div>
+
+<!-- ── GAME TABS ── -->
+<div class="game-filter-bar">
+    <button class="game-filter-btn active" data-gioco="valorant">
+        🎯 Valorant
+    </button>
+    <button class="game-filter-btn" data-gioco="r6">
+        🛡️ Rainbow Six Siege
+    </button>
+    <button class="game-filter-btn" data-gioco="lol">
+        ⚔️ League of Legends
+    </button>
 </div>
 
 <div class="controls">

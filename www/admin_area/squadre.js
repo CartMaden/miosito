@@ -1,7 +1,25 @@
-
 /* ── STATE ── */
-let allSquadre = [];
+let allSquadre  = [];
 let activeCorse = "";
+let activeGame  = "valorant";
+
+/* ── GAME FILTER TABS ── */
+document.querySelectorAll(".game-filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (btn.dataset.gioco === activeGame) return;
+        activeGame = btn.dataset.gioco;
+
+        document.querySelectorAll(".game-filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        /* reset filtro corso */
+        activeCorse = "";
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        document.querySelector('.filter-btn[data-corso=""]').classList.add("active");
+
+        loadSquadre(document.getElementById("sortSelect").value);
+    });
+});
 
 /* ── FETCH ── */
 async function loadSquadre(orderby = "data_iscrizione") {
@@ -9,7 +27,7 @@ async function loadSquadre(orderby = "data_iscrizione") {
     grid.innerHTML = `<div class="state-box"><div class="spinner"></div><p>Caricamento…</p></div>`;
 
     try {
-        const params = new URLSearchParams({ orderby });
+        const params = new URLSearchParams({ gioco: activeGame, orderby });
         const res    = await fetch(`get_iscrizioni.php?${params}`);
         const json   = await res.json();
 
@@ -36,7 +54,8 @@ function renderSquadre(filterCorso = "") {
         ? allSquadre.filter(s => s.corso === filterCorso)
         : allSquadre;
 
-    count.textContent = `${filtered.length} squadr${filtered.length === 1 ? 'a' : 'e'}`;
+    const GAME_LABELS = { valorant: 'Valorant', r6: 'Rainbow Six Siege', lol: 'League of Legends' };
+    count.textContent = `${filtered.length} squadr${filtered.length === 1 ? 'a' : 'e'} — ${GAME_LABELS[activeGame]}`;
 
     if (!filtered.length) {
         grid.innerHTML = `
@@ -82,7 +101,6 @@ function renderSquadre(filterCorso = "") {
         </div>
     `).join('');
 
-    /* attach card-level events */
     document.querySelectorAll(".edit-btn").forEach(btn =>
         btn.addEventListener("click", () => openEditModal(parseInt(btn.dataset.id)))
     );
@@ -103,9 +121,9 @@ function formatDate(dateStr) {
     return d.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
-/* ══════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    EDIT MODAL
-══════════════════════════════════════════ */
+══════════════════════════════════════════════════════════ */
 const CORSI = [
     'Developer', 'Cybersecurity', 'Cloud Computing',
     'Game Developer', 'Digital Media Specialist', 'AI and Data Science Specialist'
@@ -118,7 +136,6 @@ function openEditModal(id) {
     const modal = document.getElementById("editModal");
     modal.dataset.squadraId = id;
 
-    /* fill fields */
     document.getElementById("edit-caposquadra").value = squadra.caposquadra;
     document.getElementById("edit-corso").value       = squadra.corso;
 
@@ -155,7 +172,6 @@ async function saveEdit() {
     const feedback  = document.getElementById("edit-feedback");
     const saveBtn   = document.getElementById("edit-save-btn");
 
-    /* collect data */
     const caposquadra = document.getElementById("edit-caposquadra").value.trim();
     const corso       = document.getElementById("edit-corso").value;
     const giocatori   = [];
@@ -167,7 +183,6 @@ async function saveEdit() {
         });
     }
 
-    /* basic validation */
     if (!caposquadra || !corso) {
         feedback.textContent = "⚠ Caposquadra e corso sono obbligatori.";
         feedback.className = "edit-feedback error";
@@ -186,7 +201,7 @@ async function saveEdit() {
         const res = await fetch("update_squadra.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, caposquadra, corso, giocatori })
+            body: JSON.stringify({ id, caposquadra, corso, giocatori, gioco: activeGame })
         });
         const json = await res.json();
 
@@ -210,9 +225,9 @@ async function saveEdit() {
     }
 }
 
-/* ══════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    DELETE CONFIRM
-══════════════════════════════════════════ */
+══════════════════════════════════════════════════════════ */
 function confirmDelete(id) {
     const squadra = allSquadre.find(s => s.id === id);
     if (!squadra) return;
@@ -230,9 +245,9 @@ function closeDeleteModal() {
 }
 
 async function executeDelete() {
-    const modal   = document.getElementById("deleteModal");
-    const id      = parseInt(modal.dataset.squadraId);
-    const btn     = document.getElementById("delete-confirm-btn");
+    const modal = document.getElementById("deleteModal");
+    const id    = parseInt(modal.dataset.squadraId);
+    const btn   = document.getElementById("delete-confirm-btn");
 
     btn.disabled = true;
     btn.textContent = "Eliminazione…";
@@ -241,7 +256,7 @@ async function executeDelete() {
         const res  = await fetch("delete_squadra.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id })
+            body: JSON.stringify({ id, gioco: activeGame })
         });
         const json = await res.json();
 
@@ -259,11 +274,10 @@ async function executeDelete() {
     }
 }
 
-/* ══════════════════════════════════════════
-   BUILD MODALS (injected once at load)
-══════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   BUILD MODALS
+══════════════════════════════════════════════════════════ */
 function buildModals() {
-    /* ── EDIT MODAL ── */
     const editHTML = `
     <div class="modal-overlay" id="editModal">
         <div class="modal-box">
@@ -308,7 +322,6 @@ function buildModals() {
         </div>
     </div>`;
 
-    /* ── DELETE MODAL ── */
     const deleteHTML = `
     <div class="modal-overlay" id="deleteModal">
         <div class="modal-box modal-box--sm">
@@ -332,21 +345,16 @@ function buildModals() {
 
     document.body.insertAdjacentHTML("beforeend", editHTML + deleteHTML);
 
-    /* Events */
-    document.getElementById("edit-close-btn").addEventListener("click", closeEditModal);
+    document.getElementById("edit-close-btn").addEventListener("click",  closeEditModal);
     document.getElementById("edit-cancel-btn").addEventListener("click", closeEditModal);
-    document.getElementById("edit-save-btn").addEventListener("click", saveEdit);
+    document.getElementById("edit-save-btn").addEventListener("click",   saveEdit);
 
-    document.getElementById("delete-close-btn").addEventListener("click", closeDeleteModal);
-    document.getElementById("delete-cancel-btn").addEventListener("click", closeDeleteModal);
+    document.getElementById("delete-close-btn").addEventListener("click",   closeDeleteModal);
+    document.getElementById("delete-cancel-btn").addEventListener("click",  closeDeleteModal);
     document.getElementById("delete-confirm-btn").addEventListener("click", executeDelete);
 
-    document.getElementById("editModal").addEventListener("click", e => {
-        if (e.target === e.currentTarget) closeEditModal();
-    });
-    document.getElementById("deleteModal").addEventListener("click", e => {
-        if (e.target === e.currentTarget) closeDeleteModal();
-    });
+    document.getElementById("editModal").addEventListener("click",  e => { if (e.target === e.currentTarget) closeEditModal(); });
+    document.getElementById("deleteModal").addEventListener("click", e => { if (e.target === e.currentTarget) closeDeleteModal(); });
 
     document.addEventListener("input", e => {
         if (e.target.classList.contains("edit-mmr-input")) updateEditMMRTotal();
@@ -374,4 +382,3 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
 /* ── INIT ── */
 buildModals();
 loadSquadre();
-/*ciao ivan */

@@ -1,14 +1,19 @@
 <?php
 /**
  * get_iscrizioni.php
- * Restituisce i dati delle squadre iscritte in formato JSON.
- *
- * ── UTILIZZO ─────────────────────────────────────────────────
- * GET get_iscrizioni.php                  → tutte le squadre
- * GET get_iscrizioni.php?id=3             → una squadra specifica
- * GET get_iscrizioni.php?corso=Cybersecurity → filtra per corso
- * GET get_iscrizioni.php?orderby=mmr      → ordina per MMR totale
+ * Restituisce le squadre iscritte per un determinato gioco.
+ * Parametri GET:
+ *   gioco    = valorant | r6 | lol  (default: valorant)
+ *   orderby  = mmr | nome | corso | data_iscrizione  (default: data_iscrizione)
  */
+
+session_start();
+
+if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Non autorizzato.']);
+    exit;
+}
 
 define('DB_HOST',    'db');
 define('DB_NAME',    'area_privata');
@@ -17,113 +22,100 @@ define('DB_PASS',    'root');
 define('DB_CHARSET', 'utf8mb4');
 
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+
+/* ── PARAMETRI ── */
+$giochi_validi = ['valorant', 'r6', 'lol'];
+$gioco = strtolower(trim($_GET['gioco'] ?? 'valorant'));
+if (!in_array($gioco, $giochi_validi)) $gioco = 'valorant';
+
+$order_map = [
+    'mmr'             => 's.mmr_totale DESC',
+    'nome'            => 's.caposquadra ASC',
+    'corso'           => 's.corso ASC',
+    'data_iscrizione' => 's.data_iscrizione DESC',
+];
+$orderby  = $_GET['orderby'] ?? 'data_iscrizione';
+$order_sql = $order_map[$orderby] ?? $order_map['data_iscrizione'];
+
+/* ── NOMI TABELLE ── */
+$tbl_sq = "squadre_{$gioco}";
+$tbl_gi = "giocatori_{$gioco}";
 
 /* ── CONNESSIONE ── */
 try {
-    $pdo = new PDO(
-        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET,
-        DB_USER, DB_PASS,
-        [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ]
-    );
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+    $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Errore di connessione al database.']);
     exit;
 }
 
-/* ── PARAMETRI GET ── */
-$id      = isset($_GET['id'])      ? (int)$_GET['id']            : null;
-$corso   = isset($_GET['corso'])   ? trim($_GET['corso'])         : null;
-$orderby = isset($_GET['orderby']) ? trim($_GET['orderby'])       : 'data_iscrizione';
-
-$orderby_map = [
-    'mmr'             => 'mmr_totale DESC',
-    'data_iscrizione' => 's.data_iscrizione ASC',
-    'nome'            => 's.caposquadra ASC',
-    'corso'           => 's.corso ASC',
-];
-$order_sql = $orderby_map[$orderby] ?? 's.data_iscrizione ASC';
-
-/* ── QUERY SQUADRE ── */
+/* ── AUTO-SETUP TABELLE ── */
 try {
-    $where  = [];
-    $params = [];
-
-    if ($id) {
-        $where[]          = 's.id = :id';
-        $params[':id']    = $id;
-    }
-    if ($corso) {
-        $where[]          = 's.corso = :corso';
-        $params[':corso'] = $corso;
-    }
-
-    $where_sql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
-
-    // Recupera squadre con MMR totale calcolato
-    $stmtSquadre = $pdo->prepare("
-        SELECT
-            s.id,
-            s.caposquadra,
-            s.corso,
-            s.data_iscrizione,
-            COALESCE(SUM(g.mmr), 0) AS mmr_totale
-        FROM squadre s
-        LEFT JOIN giocatori g ON g.squadra_id = s.id
-        $where_sql
-        GROUP BY s.id, s.caposquadra, s.corso, s.data_iscrizione
-        ORDER BY $order_sql
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `{$tbl_sq}` (
+            id               INT          UNSIGNED NOT NULL AUTO_INCREMENT,
+            caposquadra      VARCHAR(120) NOT NULL,
+            corso            VARCHAR(60)  NOT NULL,
+            mmr_totale       INT          UNSIGNED NOT NULL DEFAULT 0,
+            data_iscrizione  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ");
-    $stmtSquadre->execute($params);
-    $squadre = $stmtSquadre->fetchAll();
-
-    if (!$squadre) {
-        echo json_encode(['success' => true, 'data' => []]);
-        exit;
-    }
-
-    // Recupera tutti i giocatori delle squadre trovate
-    $ids = array_column($squadre, 'id');
-    $placeholders = implode(',', array_fill(0, count($ids), '?'));
-
-    $stmtGiocatori = $pdo->prepare("
-        SELECT squadra_id, numero_giocatore, nome, mmr
-        FROM giocatori
-        WHERE squadra_id IN ($placeholders)
-        ORDER BY squadra_id, numero_giocatore
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `{$tbl_gi}` (
+            id               INT          UNSIGNED NOT NULL AUTO_INCREMENT,
+            squadra_id       INT          UNSIGNED NOT NULL,
+            numero_giocatore TINYINT      UNSIGNED NOT NULL,
+            nome             VARCHAR(120) NOT NULL,
+            mmr              INT          UNSIGNED NOT NULL DEFAULT 0,
+            PRIMARY KEY (id),
+            CONSTRAINT `fk_{$gioco}_squadra`
+                FOREIGN KEY (squadra_id) REFERENCES `{$tbl_sq}`(id)
+                ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ");
-    $stmtGiocatori->execute($ids);
-    $giocatori = $stmtGiocatori->fetchAll();
+} catch (PDOException $e) {
+    /* ignora se già esistono */
+}
 
-    // Raggruppa i giocatori per squadra
-    $giocatori_map = [];
-    foreach ($giocatori as $g) {
-        $giocatori_map[$g['squadra_id']][] = [
-            'numero' => (int)$g['numero_giocatore'],
-            'nome'   => $g['nome'],
-            'mmr'    => (int)$g['mmr'],
-        ];
-    }
+/* ── QUERY PRINCIPALE ── */
+try {
+    $stmt = $pdo->query("SELECT * FROM `{$tbl_sq}` s ORDER BY {$order_sql}");
+    $squadre = $stmt->fetchAll();
 
-    // Assembla risposta finale
+    $stmtG = $pdo->prepare("
+        SELECT numero_giocatore AS numero, nome, mmr
+        FROM `{$tbl_gi}`
+        WHERE squadra_id = ?
+        ORDER BY numero_giocatore
+    ");
+
     $result = [];
     foreach ($squadre as $s) {
+        $stmtG->execute([$s['id']]);
+        $giocatori = $stmtG->fetchAll();
+
         $result[] = [
-            'id'               => (int)$s['id'],
-            'caposquadra'      => $s['caposquadra'],
-            'corso'            => $s['corso'],
-            'data_iscrizione'  => $s['data_iscrizione'],
-            'mmr_totale'       => (int)$s['mmr_totale'],
-            'giocatori'        => $giocatori_map[$s['id']] ?? [],
+            'id'              => (int)$s['id'],
+            'caposquadra'     => $s['caposquadra'],
+            'corso'           => $s['corso'],
+            'mmr_totale'      => (int)$s['mmr_totale'],
+            'data_iscrizione' => $s['data_iscrizione'],
+            'giocatori'       => array_map(fn($g) => [
+                'numero' => (int)$g['numero'],
+                'nome'   => $g['nome'],
+                'mmr'    => (int)$g['mmr'],
+            ], $giocatori),
         ];
     }
 
-    echo json_encode(['success' => true, 'data' => $result], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    echo json_encode(['success' => true, 'data' => $result, 'gioco' => $gioco]);
 
 } catch (PDOException $e) {
     http_response_code(500);

@@ -1,9 +1,17 @@
 <?php
 /**
  * delete_squadra.php
- * Riceve via POST (JSON) l'ID di una squadra e la elimina
- * dal database (la FK ON DELETE CASCADE rimuove anche i giocatori).
+ * Elimina una squadra (e i suoi giocatori via CASCADE) dalla tabella
+ * specifica per gioco.
+ * Riceve JSON via POST con: id, gioco
  */
+
+session_start();
+if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Non autorizzato.']);
+    exit;
+}
 
 define('DB_HOST',    'db');
 define('DB_NAME',    'area_privata');
@@ -11,38 +19,43 @@ define('DB_USER',    'root');
 define('DB_PASS',    'root');
 define('DB_CHARSET', 'utf8mb4');
 
-/* ── HEADERS ── */
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
-if ($_SERVER['REQUEST_METHOD'] !== 'POST')    {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Metodo non consentito.']);
     exit;
 }
 
-/* ── LEGGI BODY ── */
 $raw  = file_get_contents('php://input');
 $data = json_decode($raw, true);
-
 if (!$data) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Dati non validi.']);
     exit;
 }
 
-$id = intval($data['id'] ?? 0);
+/* ── VALIDAZIONE ── */
+$id    = (int)($data['id']    ?? 0);
+$gioco = strtolower(trim($data['gioco'] ?? 'valorant'));
+
+$giochi_validi = ['valorant', 'r6', 'lol'];
 
 if ($id <= 0) {
     http_response_code(422);
-    echo json_encode(['success' => false, 'message' => 'ID squadra non valido.']);
+    echo json_encode(['success' => false, 'message' => 'ID non valido.']);
     exit;
 }
 
-/* ── CONNESSIONE DB ── */
+if (!in_array($gioco, $giochi_validi)) {
+    http_response_code(422);
+    echo json_encode(['success' => false, 'message' => 'Gioco non valido.']);
+    exit;
+}
+
+$tbl_sq = "squadre_{$gioco}";
+
+/* ── CONNESSIONE ── */
 try {
     $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
     $pdo = new PDO($dsn, DB_USER, DB_PASS, [
@@ -56,23 +69,22 @@ try {
     exit;
 }
 
-/* ── ELIMINA ── */
+/* ── ELIMINAZIONE ── */
 try {
-    /* La FK ON DELETE CASCADE in giocatori elimina automaticamente
-       i giocatori legati a questa squadra. */
-    $stmt = $pdo->prepare("DELETE FROM squadre WHERE id = :id");
-    $stmt->execute([':id' => $id]);
-
-    if ($stmt->rowCount() === 0) {
+    /* Verifica esistenza */
+    $check = $pdo->prepare("SELECT id FROM `{$tbl_sq}` WHERE id = ?");
+    $check->execute([$id]);
+    if (!$check->fetch()) {
         http_response_code(404);
         echo json_encode(['success' => false, 'message' => 'Squadra non trovata.']);
         exit;
     }
 
-    echo json_encode([
-        'success' => true,
-        'message' => 'Squadra eliminata con successo.'
-    ]);
+    /* La FK con ON DELETE CASCADE elimina automaticamente i giocatori */
+    $stmt = $pdo->prepare("DELETE FROM `{$tbl_sq}` WHERE id = ?");
+    $stmt->execute([$id]);
+
+    echo json_encode(['success' => true, 'message' => 'Squadra eliminata con successo.']);
 
 } catch (PDOException $e) {
     http_response_code(500);

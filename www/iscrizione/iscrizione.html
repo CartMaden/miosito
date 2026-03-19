@@ -14,40 +14,72 @@
 <header>
     <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>
-    <div class="nav-links" id="navLinks">
-        <a href="../info/info.html">Info</a>
-        <a href="../calendario/calendario.html">Calendario</a>
-        <a href="../classifica/classifica.html">Classifica</a>
-        <a href="../news/news.html">News</a>
-        <a href="../live/live.html">Live</a>
-        <a href="../merchandise/merchandise.php">Shop</a>
-        <a href="./iscrizione.html">Partecipa</a>
-        <a href="../admin_area/login.php" id="linkDashboard" style="display: none;">Dashboard</a>
-    </div>
-    <label class="switch" title="Toggle dark mode">
-  <input type="checkbox" id="darkModeToggle">
-  <span class="track"></span>
-  <span class="thumb"></span>
-</label>
-    <button class="hamburger" id="hamburger" aria-label="Apri menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+        <div class="nav-links" id="navLinks">
+            <a href="../info/info.html">Info</a>
+            <a href="../calendario/calendario.html">Calendario</a>
+            <a href="../classifica/classifica.html">Classifica</a>
+            <a href="../news/news.html">News</a>
+            <a href="../live/live.html">Live</a>
+            <a href="../merchandise/merchandise.php">Shop</a>
+            <a href="./iscrizione.html">Partecipa</a>
+            <a href="../admin_area/login.php" id="linkDashboard" style="display:none;">Dashboard</a>
+        </div>
+        <label class="switch" title="Toggle dark mode">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="track"></span>
+            <span class="thumb"></span>
+        </label>
+        <button class="hamburger" id="hamburger" aria-label="Apri menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
 </header>
 
 <div class="live-hero">
-  <div class="live-hero-eyebrow">ITS Lazio Digital Gaming</div>
-  <h1>Iscriviti al <span>Torneo</span></h1>
-  <p>Qui puoi iscriverti per il torneo.</p>
+    <div class="live-hero-eyebrow">ITS Lazio Digital Gaming</div>
+    <h1>Iscriviti al <span>Torneo</span></h1>
+    <p>Scegli il tuo gioco e registra la tua squadra.</p>
 </div>
-<section class="form-section">
+
+<!-- ── GAME PICKER ── -->
+<div class="game-picker-section">
+    <div class="game-picker-label">Seleziona il tuo gioco</div>
+    <div class="game-picker-grid">
+
+        <button type="button" class="game-pick-btn" data-gioco="valorant">
+            <span class="gpb-icon">🎯</span>
+            <span class="gpb-name">Valorant</span>
+            <span class="gpb-sub">5v5 Tactical Shooter</span>
+        </button>
+
+        <button type="button" class="game-pick-btn" data-gioco="r6">
+            <span class="gpb-icon">🛡️</span>
+            <span class="gpb-name">Rainbow Six Siege</span>
+            <span class="gpb-sub">5v5 Tactical FPS</span>
+        </button>
+
+        <button type="button" class="game-pick-btn" data-gioco="lol">
+            <span class="gpb-icon">⚔️</span>
+            <span class="gpb-name">League of Legends</span>
+            <span class="gpb-sub">5v5 MOBA</span>
+        </button>
+
+    </div>
+    <p class="game-picker-hint" id="gamePickerHint" style="display:none">
+        ⚠ Devi selezionare un gioco prima di inviare l'iscrizione.
+    </p>
+</div>
+
+<section class="form-section" id="formSection" style="display:none;">
     <div class="form-card">
+        <!-- Selected game badge -->
+        <div class="selected-game-badge" id="selectedGameBadge"></div>
+
         <h2>Iscrizione Torneo</h2>
         <p class="subtitle">Compila il modulo per iscrivere la tua squadra al Torneo ITS Lazio Digital Gaming.</p>
 
         <form id="registrationForm" novalidate>
+            <input type="hidden" id="giocoHidden" name="gioco" value="">
 
             <!-- CAPOSQUADRA -->
             <div class="section-divider"><span>Caposquadra</span></div>
@@ -70,9 +102,7 @@
 
             <!-- GIOCATORI -->
             <div class="section-divider"><span>Giocatori</span></div>
-            <div class="players-grid" id="playersGrid">
-                <!-- generate via JS -->
-            </div>
+            <div class="players-grid" id="playersGrid"></div>
 
             <!-- MMR TOTALE -->
             <div class="mmr-total-bar">
@@ -81,15 +111,15 @@
             </div>
 
             <!-- SUBMIT -->
-            <button type="submit" class="submit-btn">Invia Iscrizione</button>
+            <button type="submit" class="submit-btn" id="submitBtn">Invia Iscrizione</button>
             <div id="form-feedback"></div>
         </form>
     </div>
 </section>
 
 <footer class="site-footer">
-        <div class="footer-left">
-        <p><a href="./admin_area/login.php" class="hidden-link" >Area riservata</a></p>
+    <div class="footer-left">
+        <p><a href="./admin_area/login.php" class="hidden-link">Area riservata</a></p>
     </div>
     <div class="footer-center">
         <p class="footer-title">Torneo ITS Lazio Digital Gaming</p>
@@ -98,12 +128,12 @@
     <div class="footer-right">
         <p><a href="tel:+393281693209">☎ Ivan He — +39 328 169 3209</a></p>
         <p><a href="tel:+393518152561">☎ Emanuele Campus — +39 351 815 2561</a></p>
-       <p><a href="mailto:itstorneoesports@gmail.com">&#9993; itstorneoesports@gmail.com</a></p>
+        <p><a href="mailto:itstorneoesports@gmail.com">✉ itstorneoesports@gmail.com</a></p>
     </div>
-    <script
-script src="iscrizione.js"></script>
-    <script src="../condivisi/darkmode.js"></script>
-    <script src="../check_admin.js"></script>
+</footer>
 
+<script src="iscrizione.js"></script>
+<script src="../condivisi/darkmode.js"></script>
+<script src="../check_admin.js"></script>
 </body>
 </html>

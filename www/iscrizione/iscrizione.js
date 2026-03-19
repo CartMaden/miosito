@@ -1,3 +1,40 @@
+/* ── GAME PICKER ── */
+const GAME_META = {
+    valorant: { label: 'Valorant',              color: '#ff4655', emoji: '🎯' },
+    r6:       { label: 'Rainbow Six Siege',      color: '#f0a500', emoji: '🛡️' },
+    lol:      { label: 'League of Legends',      color: '#c89b3c', emoji: '⚔️' },
+};
+
+let selectedGame = null;
+
+document.querySelectorAll(".game-pick-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        selectedGame = btn.dataset.gioco;
+
+        /* aggiorna stile bottoni */
+        document.querySelectorAll(".game-pick-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        /* mostra form */
+        document.getElementById("formSection").style.display = "flex";
+        document.getElementById("gamePickerHint").style.display = "none";
+        document.getElementById("giocoHidden").value = selectedGame;
+
+        /* aggiorna badge nel form */
+        const meta = GAME_META[selectedGame];
+        const badge = document.getElementById("selectedGameBadge");
+        badge.textContent = `${meta.emoji} ${meta.label}`;
+        badge.style.setProperty('--game-color', meta.color);
+        badge.className = `selected-game-badge game-${selectedGame}`;
+
+        /* aggiorna submit button color */
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.className = `submit-btn submit-${selectedGame}`;
+
+        /* scroll al form */
+        document.getElementById("formSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+});
 
 /* ── BUILD PLAYER CARDS ── */
 const playersGrid = document.getElementById("playersGrid");
@@ -34,14 +71,21 @@ document.addEventListener("input", (e) => {
 });
 
 /* ── FORM SUBMIT ── */
-const form = document.getElementById("registrationForm");
+const form     = document.getElementById("registrationForm");
 const feedback = document.getElementById("form-feedback");
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     feedback.className = "";
 
-    // Client-side validation
+    /* verifica gioco selezionato */
+    if (!selectedGame) {
+        document.getElementById("gamePickerHint").style.display = "block";
+        document.querySelector(".game-picker-section").scrollIntoView({ behavior: "smooth" });
+        return;
+    }
+
+    /* validazione campi */
     let valid = true;
     form.querySelectorAll("[required]").forEach(field => {
         field.classList.remove("error");
@@ -57,39 +101,47 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    // Build payload
+    /* costruisci payload */
     const data = {
         caposquadra: form.caposquadra.value.trim(),
         corso:       form.corso.value,
-        giocatori:   []
+        gioco:       selectedGame,
+        giocatori:   [],
     };
 
     for (let i = 1; i <= NUM_PLAYERS; i++) {
         data.giocatori.push({
             nome: form[`player_name_${i}`].value.trim(),
-            mmr:  parseInt(form[`player_mmr_${i}`].value) || 0
+            mmr:  parseInt(form[`player_mmr_${i}`].value) || 0,
         });
     }
 
-    // Disable button while sending
     const btn = form.querySelector(".submit-btn");
     btn.disabled = true;
     btn.textContent = "Invio in corso…";
 
     try {
         const response = await fetch("submit_iscrizione.php", {
-            method: "POST",
+            method:  "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            body:    JSON.stringify(data),
         });
 
         const result = await response.json();
 
         if (response.ok && result.success) {
-            feedback.textContent = "✅ Iscrizione inviata con successo! Buona fortuna campione!";
+            const meta = GAME_META[selectedGame];
+            feedback.textContent = `✅ Iscrizione a ${meta.label} inviata con successo! Buona fortuna campione!`;
             feedback.className = "success";
             form.reset();
             document.getElementById("mmrTotal").textContent = "0";
+
+            /* reset selezione gioco */
+            selectedGame = null;
+            document.querySelectorAll(".game-pick-btn").forEach(b => b.classList.remove("active"));
+            setTimeout(() => {
+                document.getElementById("formSection").style.display = "none";
+            }, 3000);
         } else {
             feedback.textContent = "❌ Errore: " + (result.message || "Riprova più tardi.");
             feedback.className = "error";

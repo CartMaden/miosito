@@ -747,3 +747,67 @@ body.dark-mode .edit-feedback.error {
     .card-footer { flex-direction: column; align-items: flex-start; }
     .card-actions { width: 100%; justify-content: flex-end; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   GAME FILTER BAR  (stile ispirato a news.css)
+══════════════════════════════════════════════════════════ */
+.game-filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 28px auto 0;
+  padding: 0 24px;
+}
+
+.game-filter-btn {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+body.dark-mode .game-filter-btn {
+  background: var(--card-bg);
+  border-color: var(--border);
+}
+
+/* Valorant */
+.game-filter-btn[data-gioco="valorant"]:hover,
+.game-filter-btn[data-gioco="valorant"].active {
+  background: #ff4655;
+  border-color: #ff4655;
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(255,70,85,.30);
+}
+
+/* Rainbow Six */
+.game-filter-btn[data-gioco="r6"]:hover,
+.game-filter-btn[data-gioco="r6"].active {
+  background: #f0a500;
+  border-color: #f0a500;
+  color: #000;
+  box-shadow: 0 4px 18px rgba(240,165,0,.30);
+}
+
+/* League of Legends */
+.game-filter-btn[data-gioco="lol"]:hover,
+.game-filter-btn[data-gioco="lol"].active {
+  background: #c89b3c;
+  border-color: #c89b3c;
+  color: #000;
+  box-shadow: 0 4px 18px rgba(200,155,60,.30);
+}
+
+@media (max-width: 600px) {
+  .game-filter-bar { gap: 8px; }
+  .game-filter-btn { font-size: 12px; padding: 8px 14px; }
+}

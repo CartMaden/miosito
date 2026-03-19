@@ -216,10 +216,18 @@
             transition: background 0.2s, transform 0.15s;
         }
 
-        .submit-btn:hover { background: #004d99; transform: translateY(-1px); }
-        .submit-btn:active { transform: translateY(0); }
-        body.dark-mode .submit-btn { background: #1a4faa; }
+        .submit-btn:hover    { background: #004d99; transform: translateY(-1px); }
+        .submit-btn:active   { transform: translateY(0); }
+        body.dark-mode .submit-btn       { background: #1a4faa; }
         body.dark-mode .submit-btn:hover { background: #2560cc; }
+
+        /* Game-coloured submit variants */
+        .submit-valorant            { background: #c73040 !important; }
+        .submit-valorant:hover      { background: #ff4655 !important; }
+        .submit-r6                  { background: #c08500 !important; }
+        .submit-r6:hover            { background: #f0a500 !important; }
+        .submit-lol                 { background: #a07828 !important; }
+        .submit-lol:hover           { background: #c89b3c !important; }
 
         /* ── FEEDBACK ── */
         #form-feedback {
@@ -294,13 +302,164 @@
 
         body.dark-mode .mmr-total-bar .value { color: #7eb0ff; }
 
+        /* ══════════════════════════════════════════
+           GAME PICKER
+        ══════════════════════════════════════════ */
+        .game-picker-section {
+            max-width: 900px;
+            margin: 48px auto 0;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .game-picker-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        body.dark-mode .game-picker-label { color: #666; }
+
+        .game-picker-grid {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ── Individual game button — mirrors news filter style ── */
+        .game-pick-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 22px 32px 20px;
+            border-radius: 12px;
+            border: 1.5px solid #e0e6f0;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.22s;
+            min-width: 200px;
+            flex: 1;
+            max-width: 260px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .game-pick-btn {
+            background: #1a1a2a;
+            border-color: #2a2a40;
+        }
+
+        .game-pick-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.22s;
+            background: currentColor;
+        }
+
+        .gpb-icon {
+            font-size: 32px;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .gpb-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #1a1a2e;
+            transition: color 0.22s;
+        }
+
+        body.dark-mode .gpb-name { color: #e8e8ff; }
+
+        .gpb-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: #888;
+            transition: color 0.22s;
+        }
+
+        /* Hover & Active states per gioco */
+        .game-pick-btn[data-gioco="valorant"]:hover,
+        .game-pick-btn[data-gioco="valorant"].active {
+            border-color: #ff4655;
+            background: #ff4655;
+            box-shadow: 0 8px 28px rgba(255,70,85,.35);
+            transform: translateY(-3px);
+        }
+
+        .game-pick-btn[data-gioco="r6"]:hover,
+        .game-pick-btn[data-gioco="r6"].active {
+            border-color: #f0a500;
+            background: #f0a500;
+            box-shadow: 0 8px 28px rgba(240,165,0,.35);
+            transform: translateY(-3px);
+        }
+
+        .game-pick-btn[data-gioco="lol"]:hover,
+        .game-pick-btn[data-gioco="lol"].active {
+            border-color: #c89b3c;
+            background: #c89b3c;
+            box-shadow: 0 8px 28px rgba(200,155,60,.35);
+            transform: translateY(-3px);
+        }
+
+        .game-pick-btn:hover .gpb-name,
+        .game-pick-btn.active .gpb-name,
+        .game-pick-btn:hover .gpb-sub,
+        .game-pick-btn.active .gpb-sub {
+            color: #fff;
+        }
+
+        .game-pick-btn:hover .gpb-icon,
+        .game-pick-btn.active .gpb-icon {
+            transform: scale(1.15);
+        }
+
+        /* ── Selected game badge in form ── */
+        .selected-game-badge {
+            display: inline-block;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            color: #fff;
+            background: var(--game-color, #003366);
+        }
+
+        .game-picker-hint {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: #cc1a2e;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 600px) {
             .form-card { padding: 28px 18px 32px; }
             .players-grid { grid-template-columns: 1fr; }
             .mmr-row { grid-template-columns: 1fr; }
             .form-card h2 { font-size: 22px; }
+            .game-pick-btn { min-width: 140px; padding: 16px 18px; }
+            .gpb-icon { font-size: 24px; }
+            .gpb-name { font-size: 15px; }
         }
+
+/* ── LIVE HERO (kept from original) ── */
 .live-hero {
   position: relative;
   overflow: hidden;
@@ -346,13 +505,11 @@
   line-height: 1.6;
   position: relative;
 }
-
 .live-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 24px 80px;
 }
-
 body.dark-mode .live-hero::after { background: #161616; }
 .live-hero-eyebrow {
   font-family: 'Rajdhani', sans-serif;

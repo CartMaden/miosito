@@ -6,7 +6,6 @@ body {
   display: block !important;
   flex-direction: column;
   justify-content: center;
-  background-color: #f4f4f4;
 }
 body::before {
   content: "";
@@ -15,9 +14,11 @@ body::before {
   background: rgba(0, 0, 0, 0.7);
   z-index: -1;
 }
-body::-webkit-scrollbar {
-  display: none;
-}
+
+body::-webkit-scrollbar {display: none;}
+
+body, html {overflow: hidden;}
+
 .btn-dashboard {
   padding: 10px 20px;
   background-color: goldenrod;

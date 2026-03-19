@@ -1,14 +1,24 @@
 /* ============================================================
    calendario.js — Torneo a Punti (Swiss)
-   Mostra tutti i turni con risultati per partita.
+   Multi-gioco: Valorant / Rainbow Six Siege / League of Legends
    Polling ogni 15 secondi per aggiornamenti live.
    ============================================================ */
 
 (function () {
 
     const POLL_INTERVAL = 15000;
-    let   currentTab    = "tutti";
-    let   lastData      = null;
+    const ENDPOINT      = "../admin_area/get_bracket.php";
+
+    const GAME_META = {
+        valorant: { label: 'Valorant',          color: '#ff4655' },
+        r6:       { label: 'Rainbow Six Siege',  color: '#f0a500' },
+        lol:      { label: 'League of Legends',  color: '#c89b3c' },
+    };
+
+    let currentGame = "valorant";
+    let currentTab  = "tutti";
+    let lastData    = null;
+    let pollTimer   = null;
 
     /* ── UTILS ── */
     function esc(str) {
@@ -26,9 +36,37 @@
         t._timer = setTimeout(() => { t.className = "toast"; }, 3000);
     }
 
+    /* ── GAME TABS ── */
+    function initGameTabs() {
+        document.querySelectorAll(".game-tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (btn.dataset.gioco === currentGame) return;
+                currentGame = btn.dataset.gioco;
+
+                document.querySelectorAll(".game-tab-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                document.documentElement.style.setProperty('--game-accent', GAME_META[currentGame].color);
+
+                /* reset stato e ricarica */
+                lastData   = null;
+                currentTab = "tutti";
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                const allBtn = document.querySelector('.tab-btn[data-tab="tutti"]');
+                if (allBtn) allBtn.classList.add("active");
+
+                updateStats(null);
+                document.getElementById("tabBar").style.display = "none";
+                document.getElementById("calContent").innerHTML =
+                    `<div class="empty-state"><div class="empty-icon">📅</div><h2>Caricamento…</h2></div>`;
+                refresh(true);
+            });
+        });
+    }
+
     /* ── FETCH ── */
     async function fetchBracket() {
-        const res  = await fetch("../admin_area/get_bracket.php?t=" + Date.now());
+        const res  = await fetch(`${ENDPOINT}?gioco=${currentGame}&t=${Date.now()}`);
         const json = await res.json();
         return json;
     }
@@ -36,10 +74,10 @@
     /* ── STATS ── */
     function updateStats(bracket) {
         if (!bracket || bracket.length === 0) {
-            document.getElementById("statTotali").textContent    = "—";
-            document.getElementById("statGiocate").textContent   = "—";
-            document.getElementById("statRimanenti").textContent = "—";
-            document.getElementById("statFase").textContent      = "—";
+            ["statTotali","statGiocate","statRimanenti","statFase"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = "—";
+            });
             const liveDot = document.getElementById("liveDot");
             if (liveDot) liveDot.style.display = "none";
             return;
@@ -48,20 +86,18 @@
         let totali = 0, giocate = 0;
         bracket.forEach(round => {
             round.forEach(m => {
-                if (m.t2 !== null) { // Esclude BYE
+                if (m.t2 !== null) {
                     totali++;
                     if (m.winner !== null) giocate++;
                 }
             });
         });
 
-        const rimanenti    = totali - giocate;
-        const turnoAttuale = bracket.length;
-
+        const rimanenti = totali - giocate;
         document.getElementById("statTotali").textContent    = totali;
         document.getElementById("statGiocate").textContent   = giocate;
         document.getElementById("statRimanenti").textContent = rimanenti;
-        document.getElementById("statFase").textContent      = `Turno ${turnoAttuale}`;
+        document.getElementById("statFase").textContent      = `Turno ${bracket.length}`;
 
         const liveDot = document.getElementById("liveDot");
         if (liveDot) liveDot.style.display = (giocate > 0 && rimanenti > 0) ? "flex" : "none";
@@ -118,7 +154,6 @@
                 const { t1, t2, winner } = match;
                 const isBye = t2 === null;
 
-                // Nei tab risultati/prossime non mostrare i BYE
                 if (isBye && tab !== "tutti") return;
 
                 if (isBye) {
@@ -185,11 +220,26 @@
         const tabBar  = document.getElementById("tabBar");
         if (!content) return;
 
+        const meta = GAME_META[currentGame];
+
+        /* Torneo concluso: ha classifica ma non bracket */
+        if (data.success && data.classifica && data.bracket === null) {
+            updateStats(null);
+            if (tabBar) tabBar.style.display = "none";
+            content.innerHTML = `<div class="empty-state">
+                <div class="empty-icon">🏆</div>
+                <h2>${meta.label} — Torneo Concluso</h2>
+                <p>Il torneo si è concluso. Consulta la <a href="../classifica/classifica.html" style="color:var(--game-accent,#003366)">classifica</a> per il risultato finale.</p>
+            </div>`;
+            return;
+        }
+
+        /* Nessun bracket */
         if (!data.success || !data.bracket || !data.bracket.length) {
             content.innerHTML = `<div class="empty-state">
                 <div class="empty-icon">📅</div>
-                <h2>Nessun torneo in corso</h2>
-                <p>Il bracket non è ancora stato generato nella pagina Matchmaking.</p>
+                <h2>${meta.label} — Nessun torneo in corso</h2>
+                <p>Torna qui il 15/05/2026 per vedere risultati e scontri programmati!</p>
             </div>`;
             updateStats(null);
             if (tabBar) tabBar.style.display = "none";
@@ -216,9 +266,7 @@
             const data = await fetchBracket();
             const prev = JSON.stringify(lastData);
             const curr = JSON.stringify(data);
-            if (prev && prev !== curr && !silent) {
-                showToast("🔄 Risultati aggiornati");
-            }
+            if (prev && prev !== curr && !silent) showToast("🔄 Risultati aggiornati");
             lastData = data;
             render(data);
         } catch (err) {
@@ -231,6 +279,11 @@
                 </div>`;
             }
         }
+    }
+
+    function startPolling() {
+        if (pollTimer) clearInterval(pollTimer);
+        pollTimer = setInterval(() => refresh(false), POLL_INTERVAL);
     }
 
     /* ── TAB LOGIC ── */
@@ -247,9 +300,11 @@
 
     /* ── INIT ── */
     document.addEventListener("DOMContentLoaded", () => {
+        document.documentElement.style.setProperty('--game-accent', GAME_META[currentGame].color);
+        initGameTabs();
         initTabs();
         refresh(true);
-        setInterval(() => refresh(false), POLL_INTERVAL);
+        startPolling();
     });
 
 })();
