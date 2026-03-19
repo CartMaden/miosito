@@ -28,9 +28,14 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
             <a href="../live/live.html">Live</a>
             <a href="../merchandise/merchandise.php">Shop</a>
             <a href="../iscrizione/iscrizione.html">Partecipa</a>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="squadre.php">Squadre</a>
-            <a href="matchmaking.php">Matchmaking</a>
+            <div class="nav-dropdown" id="navDropdown">
+                <a href="dashboard.php" class="nav-dropdown-toggle">Dashboard <span class="dropdown-arrow">▾</span></a>
+                <div class="nav-dropdown-menu">
+                    <a href="matchmaking.php"> Matchmaking</a>
+                    <a href="squadre.php"> Squadre</a>
+                    <a href="logout.php" class="dropdown-logout">⏻ Logout</a>
+                </div>
+            </div>
         </div>
         <label class="switch" title="Toggle dark mode">
             <input type="checkbox" id="darkModeToggle">

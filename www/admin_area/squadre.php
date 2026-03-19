@@ -30,9 +30,14 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
             <a href="../live/live.html">Live</a>
             <a href="../merchandise/merchandise.php">Shop</a>
             <a href="../iscrizione/iscrizione.html">Partecipa</a>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="squadre.php">Squadre</a>
-            <a href="matchmaking.php">Matchmaking</a>
+            <div class="nav-dropdown" id="navDropdown">
+                <a href="dashboard.php" class="nav-dropdown-toggle">Dashboard <span class="dropdown-arrow">▾</span></a>
+                <div class="nav-dropdown-menu">
+                    <a href="matchmaking.php"> Matchmaking</a>
+                    <a href="squadre.php"> Squadre</a>
+                    <a href="logout.php" class="dropdown-logout">⏻ Logout</a>
+                </div>
+            </div>
         </div>
         <label class="switch" title="Toggle dark mode">
             <input type="checkbox" id="darkModeToggle">
@@ -106,27 +111,28 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 <script src="squadre.js"></script>
 <script src="../condivisi/darkmode.js"></script>
 <script>
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-        const open = navLinks.classList.toggle('open');
-        hamburger.classList.toggle('open', open);
-        hamburger.setAttribute('aria-expanded', open);
-    });
-    navLinks.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-            navLinks.classList.remove('open');
-            hamburger.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', false);
+    // Dropdown toggle (click for mobile, hover handled by CSS for desktop)
+    (function() {
+        var dropdown = document.getElementById('navDropdown');
+        if (!dropdown) return;
+        var toggle = dropdown.querySelector('.nav-dropdown-toggle');
+        var arrow  = dropdown.querySelector('.dropdown-arrow');
+
+        toggle.addEventListener('click', function(e) {
+            // On mobile (hamburger visible), toggle dropdown on click
+            if (window.getComputedStyle(document.getElementById('hamburger')).display !== 'none') {
+                e.preventDefault();
+                dropdown.classList.toggle('open');
+            }
+            // On desktop, let the link navigate normally
         });
-    });
-    document.addEventListener('click', e => {
-        if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-            navLinks.classList.remove('open');
-            hamburger.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', false);
-        }
-    });
+
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+    })();
 </script>
 </body>
 </html>
