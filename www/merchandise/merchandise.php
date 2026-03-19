@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="it">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
     <title>Merchandise — ITS Lazio Digital Gaming</title>
     <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
@@ -179,10 +180,10 @@
       </div>
     </footer>
 
-    <script data
-script src="../condivisi/darkmode.js"></script>
+
+  </body>
+      <script src="../condivisi/darkmode.js"></script>
     <script src="./merchandise.js"></script>
     <script src="../check_admin.js"></script>
 
-  </body>
 </html>

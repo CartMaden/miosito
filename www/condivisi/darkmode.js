@@ -1,3 +1,4 @@
+// ── DARK MODE ──
 const toggle = document.getElementById('darkModeToggle');
 
 if (localStorage.getItem('darkMode') === 'enabled') {
@@ -11,42 +12,26 @@ toggle.addEventListener('change', () => {
   localStorage.setItem('darkMode', dark ? 'enabled' : 'disabled');
 });
 
-const menuToggle = document.getElementById('menuToggle');
-const mainNav = document.getElementById('mainNav');
+// ── HAMBURGER MENU ──
+(function () {
+  var btn  = document.getElementById('hamburger');
+  var menu = document.getElementById('navLinks');
+  if (!btn || !menu) return;
 
-menuToggle.addEventListener('click', () => {
-    // Toggles the 'active' class on both button and nav
-    menuToggle.classList.toggle('active');
-    mainNav.classList.toggle('active');
-});
-
-// Close the menu when clicking a link
-document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', () => {
-        menuToggle.classList.remove('active');
-        mainNav.classList.remove('active');
-    });
-});
-
-
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('navLinks');
-  hamburger.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('open');
-    hamburger.classList.toggle('open', open);
-    hamburger.setAttribute('aria-expanded', open);
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var isOpen = menu.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen);
   });
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', false);
-    });
+
+  menu.addEventListener('click', function (e) {
+    e.stopPropagation();
   });
-  document.addEventListener('click', e => {
-    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', false);
-    }
+
+  document.addEventListener('click', function () {
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
   });
+})();
