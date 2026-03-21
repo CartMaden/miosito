@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 dropdown.innerHTML = `
                     <a href="../admin_area/dashboard.php" class="nav-dropdown-toggle">Dashboard <span class="dropdown-arrow">▾</span></a>
                     <div class="nav-dropdown-menu">
-                        <a href="../admin_area/matchmaking.php">⚡ Matchmaking</a>
-                        <a href="../admin_area/squadre.php">👥 Squadre</a>
+                        <a href="../admin_area/matchmaking.php"> Matchmaking</a>
+                        <a href="../admin_area/squadre.php"> Squadre</a>
                         <a href="../admin_area/logout.php" class="dropdown-logout">⏻ Logout</a>
                     </div>`;
 

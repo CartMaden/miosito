@@ -1,8 +1,8 @@
 /* ── GAME PICKER ── */
 const GAME_META = {
-    valorant: { label: 'Valorant',              color: '#ff4655', emoji: '🎯' },
-    r6:       { label: 'Rainbow Six Siege',      color: '#f0a500', emoji: '🛡️' },
-    lol:      { label: 'League of Legends',      color: '#c89b3c', emoji: '⚔️' },
+    valorant: { label: 'Valorant',              color: '#ff4655',  },
+    r6:       { label: 'Rainbow Six Siege',      color: '#f0a500',  },
+    lol:      { label: 'League of Legends',      color: '#c89b3c',  },
 };
 
 let selectedGame = null;
@@ -23,7 +23,7 @@ document.querySelectorAll(".game-pick-btn").forEach(btn => {
         /* aggiorna badge nel form */
         const meta = GAME_META[selectedGame];
         const badge = document.getElementById("selectedGameBadge");
-        badge.textContent = `${meta.emoji} ${meta.label}`;
+        badge.textContent = ` ${meta.label}`;
         badge.style.setProperty('--game-color', meta.color);
         badge.className = `selected-game-badge game-${selectedGame}`;
 

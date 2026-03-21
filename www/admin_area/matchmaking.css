@@ -171,8 +171,9 @@ body.dark-mode .btn-win:disabled { background: #22c55e55; }
 
 .game-tab:hover { color: var(--text); }
 
-.gt-icon { font-size: 18px; }
+
 .gt-label { line-height: 1; }
+.manImg{ max-width: 20px; }
 
 /* ── Valorant tab ── */
 .game-tab[data-gioco="valorant"]:hover,

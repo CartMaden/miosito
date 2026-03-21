@@ -57,14 +57,14 @@ if (!isset($_SESSION['admin_loggato']) || $_SESSION['admin_loggato'] !== true) {
 
 <!-- ── GAME TABS ── -->
 <div class="game-filter-bar">
-    <button class="game-filter-btn active" data-gioco="valorant">
-        🎯 Valorant
+    <button class="game-filter-btn active" data-gioco="valorant"><img class="manImg" src="../photo/val_icon.jpg"></img>
+        Valorant
     </button>
-    <button class="game-filter-btn" data-gioco="r6">
-        🛡️ Rainbow Six Siege
+    <button class="game-filter-btn" data-gioco="r6"><img class="manImg" src="../photo/r6_icon.png"></img>
+        Rainbow Six Siege
     </button>
-    <button class="game-filter-btn" data-gioco="lol">
-        ⚔️ League of Legends
+    <button class="game-filter-btn" data-gioco="lol"><img class="manImg" src="../photo/lol_icon.png"></img>
+        League of Legends
     </button>
 </div>
 

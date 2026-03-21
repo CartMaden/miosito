@@ -31,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-
     // Cerca l'utente nel database
     $stmt = $pdo->prepare("SELECT * FROM admin WHERE username = ?");
     $stmt->execute([$username]);
@@ -59,41 +58,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="shortcut icon" href="../photo/favicon.ico">
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="../condivisi/headerdarkmode.css">
-
 </head>
 <body>
-<div>
+
 <header>
     <a href="../index.html"><img src="../photo/Logo_Laziodigital.png" alt="logo"></a>
     <nav>
-        <a href="../info/info.html">Info</a>
-        <a href="../calendario/calendario.html">Calendario</a>
-        <a href="../classifica/classifica.html">Classifica</a>
-        <a href="../news/news.html">News</a>
-        <a href="../live/live.html">Live</a>
-        <a href="../merchandise/merchandise.php">Shop</a>
-        <a href="../iscrizione/iscrizione.html">Partecipa</a>
-        <button id="darkModeToggle">⏾</button> 
+        <div class="nav-links" id="navLinks">
+            <a href="../info/info.html">Info</a>
+            <a href="../calendario/calendario.html">Calendario</a>
+            <a href="../classifica/classifica.html">Classifica</a>
+            <a href="../news/news.html">News</a>
+            <a href="../live/live.html">Live</a>
+            <a href="../merchandise/merchandise.php">Shop</a>
+            <a href="../iscrizione/iscrizione.html">Partecipa</a>
+        </div>
+        <!-- Switch identico a index.html: darkmode.js usa toggle.checked -->
+        <label class="switch" title="Toggle dark mode">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="track"></span>
+            <span class="thumb"></span>
+        </label>
+        <button class="hamburger" id="hamburger" aria-label="Apri menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 </header>
-</div>
-    <div class="login-box">
-        <h2>Accesso Riservato</h2>
-        
-        <?php if($errore): ?>
-            <div class="errore"><?php echo $errore; ?></div>
-        <?php endif; ?>
 
-        <form method="POST" action="">
-            <label>Username</label>
-            <input type="text" name="username" required>
-            
-            <label>Password</label>
-            <input type="password" name="password" required>
-            
-            <button type="submit">Entra</button>
-        </form>
-    </div>
-</body>
+<div class="login-box">
+    <h2>Accesso Riservato</h2>
+
+    <?php if($errore): ?>
+        <div class="errore"><?php echo $errore; ?></div>
+    <?php endif; ?>
+
+    <form method="POST" action="">
+        <label>Username</label>
+        <input type="text" name="username" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Entra</button>
+    </form>
+</div>
+
 <script src="../condivisi/darkmode.js"></script>
+</body>
 </html>

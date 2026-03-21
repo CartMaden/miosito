@@ -4,7 +4,6 @@
 
     sfondi dinamici(video)
     fix hero, adeguamento pagine prendendo come base calendario/classifica
-    fix email protected
-    cambio icone iscrizione/squadre/matchmaking/calendario/classifica con icone giochi
+
 
 (VVV = fatto)

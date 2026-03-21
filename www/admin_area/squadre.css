@@ -17,7 +17,7 @@ body.dark-mode {
   --text: #e8e8ff;
   --muted: #7878aa;
   --tag-bg: #1a1a2e;
-  --blue: #4a7fff;
+  --blue: #0d1a2e;
   --blue-mid: #6699ff;
 }
 
@@ -376,6 +376,11 @@ body.dark-mode .squad-card:hover {
     cursor: pointer;
     transition: all 0.18s;
     background: transparent;
+}
+
+body.dark-mode .edit-btn {
+    border-color: #6699ff;
+    color: #638cdd;
 }
 
 .edit-btn {
@@ -751,6 +756,8 @@ body.dark-mode .edit-feedback.error {
 /* ══════════════════════════════════════════════════════════
    GAME FILTER BAR  (stile ispirato a news.css)
 ══════════════════════════════════════════════════════════ */
+.manImg{ max-width: 20px; display: inline-block; align-items: center; }
+
 .game-filter-bar {
   display: flex;
   gap: 10px;
@@ -761,6 +768,8 @@ body.dark-mode .edit-feedback.error {
 }
 
 .game-filter-btn {
+  display: flex;
+  align-items: center;
   font-family: "Rajdhani", sans-serif;
   font-weight: 700;
   font-size: 14px;

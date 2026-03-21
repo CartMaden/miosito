@@ -531,7 +531,7 @@ body.dark-mode .game-tab-btn {
     color: #6868aa;
 }
 
-.gtb-icon  { font-size: 18px; line-height: 1; }
+.manImg { max-width: 20px; }
 .gtb-label { line-height: 1; }
 
 /* Valorant */
